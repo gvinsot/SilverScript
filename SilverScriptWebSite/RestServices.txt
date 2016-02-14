@@ -1,0 +1,5 @@
+﻿http://www.geoplugin.net/json.gp?ip=xx.xx.xx.xx
+http://www.geoplugin.net/extras/location.gp?lat=XXX&long=YYY&format=json
+http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=Earth%20Day
+https://ajax.googleapis.com/ajax/services/search/news?v=1.0&q=barack%20obama
+https://api.ipify.org?format=json
