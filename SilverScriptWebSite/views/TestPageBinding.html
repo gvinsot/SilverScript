@@ -1,0 +1,30 @@
+﻿
+    <style type="text/css">
+        .auto-style1 {
+            background-color: #AADDFF;
+        }
+    </style>
+<div style="margin: 30px">
+<h2>Test Page<br/></h2>
+<br/>
+    <br />
+    Test two way binding to update objects.<br />
+    <br />
+    <span class="auto-style1">
+    <br />
+    <br />
+    </span>
+    
+    <br />
+    <div data-context="/viewmodels/Test/1">        
+        User:
+        <input type="text" data-binding="{Binding Path=Name,Mode=TwoWay,Destination=value}" style="width: 100px;height:23px" value=""/>
+        <br />
+        <br />
+        If you change text, it will get automatically updated here :<br />
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=Name,Destination=Content,Mode=OneWay}">Binded text</div>        
+        <br />
+        
+    </div>
+</div>
+

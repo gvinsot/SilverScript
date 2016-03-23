@@ -22,10 +22,15 @@ namespace SilverScript.viewmodels
             return result;
         }
 
-        // GET: api/Test/5
-        public string Get(int id)
+        public class TestClass
         {
-            return "value";
+            public string Name = "toto";
+            public int Age = 99;
+        }
+        // GET: api/Test/5
+        public TestClass Get(int id)
+        {
+            return new TestClass();
         }
 
         // POST: api/Test

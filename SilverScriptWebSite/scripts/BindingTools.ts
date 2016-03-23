@@ -4,7 +4,7 @@
 ///<reference path="Interfaces.ts" />
 ///<reference path="FileTools.ts" />
 
-module SilverScriptTools {
+module SS {
 
     export class Binding implements IDisposable {
         public Path: string;
@@ -18,13 +18,15 @@ module SilverScriptTools {
         SetBindedObject(value: any) {
             this._bindedObject = value;
 
-            if (value.PropertyChanged != undefined) {
-                (<EventHandler>value.PropertyChanged).Attach(this.UpdateNodeOnContextChange);
+            if (value.PropertyChanged  == undefined) {
+                value.PropertyChanged = new EventHandler();
             }
+
+            (<EventHandler>value.PropertyChanged).Attach(this.UpdateNodeOnContextChange, this);
         }
 
-        UpdateNodeOnContextChange(): void {
-            BindingTools.ApplyBinding(this.Node);
+        UpdateNodeOnContextChange(context:any, args: any): void {
+            BindingTools.ApplyBinding(context.Node);
         }
 
         constructor(path: string, node: HTMLElement, bindedObject: any) {
@@ -35,7 +37,7 @@ module SilverScriptTools {
 
         public Dispose(): void {
             if (this._bindedObject.PropertyChanged != undefined) {
-                (<EventHandler>this._bindedObject).Dettach(this.UpdateNodeOnContextChange);
+                (<EventHandler>this._bindedObject.PropertyChanged).Dettach(this.UpdateNodeOnContextChange);
             }
         }
     }
@@ -45,7 +47,7 @@ module SilverScriptTools {
 
         CurrentBindingId: number = 0;
 
-        AddBinding(bindedObject: any, path: string, node: HTMLElement): void {
+        CreateBinding(bindedObject: any, path: string, node: HTMLElement): Binding {
             if (node["data-binding-ids"] == undefined) {
                 node["data-binding-ids"] = [];               
             }
@@ -58,6 +60,7 @@ module SilverScriptTools {
             var binding = new Binding(path, node, bindedObject);
 
             this.BindingDictionary[bindingId] = binding;
+            return binding;
         }
 
         DisposeBindings(node) {
@@ -94,26 +97,36 @@ module SilverScriptTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
 
 
+
         public static ApplyBinding(rootNode: HTMLElement): void {
             if (rootNode.attributes["data-binding"] != undefined) {
-                SilverScriptTools.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"]["nodeValue"], rootNode);
-                //apply template
-                //BindingTools.ApplyTemplate(rootNode);
+                SS.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"]["nodeValue"], rootNode);
+                
+               
+            }
+            if (rootNode.attributes["data-onload"] != undefined) {
+                eval(rootNode.attributes["data-onload"].nodeValue);
             }
         }
 
         public static ApplyTemplate(rootNode: Node): void {
             if (rootNode.attributes["data-template"] != undefined) {
-                SilverScriptTools.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"]["nodeValue"], rootNode);
+                SS.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"]["nodeValue"], rootNode);
             }
         }
 
-        public static SetContent(targetNode: string, uri: string) {
+        public static NewDataContextObject(rootNode: Node): void {
+            if (rootNode.attributes["data-template-value"] == undefined) {
+                rootNode.attributes["data-template-value"] = new Object();
+            }
+        }
+
+        public static SetTemplate(targetNode: string, uri: string) {
             var node = document.getElementById(targetNode);
 
             BindingTools.DisposeBindingsRecursively(node, true);
             node.attributes["data-template"] = uri;
-            SilverScriptTools.BindingTools.ApplyTemplate(node);                
+            SS.BindingTools.ApplyTemplate(node);                
         }
 
         public static DisposeBindingsRecursively(rootNode: HTMLElement, skiprootNode: boolean = false): void {
@@ -253,9 +266,17 @@ module SilverScriptTools {
                 }
                 
                 if (!expectObjectResult)
-                    return expression;
-                else
-                    return FileTools.ReadJsonFile(expression);          
+                    return expression;       
+				else {
+                    if (contextNode.attributes["data-context-post"] != undefined) {
+                        var postExpression = contextNode.attributes["data-context-post"].nodeValue;
+                        var postData = BindingTools.EvaluateExpression(postExpression, datacontext, parent, false);
+                        return FileTools.PostJsonFile(expression, postData);
+                    }
+                    else {
+                        return FileTools.ReadJsonFile(expression);
+                    }
+                }
             }
             else if (nbElements>0) {
                 let result = [];
@@ -335,22 +356,34 @@ module SilverScriptTools {
                     }
             }
             var value;
-
+            var sourceIsArray= Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
-                var sourceString = Object.prototype.toString.call(source) === '[object Array]' ? 'source' : 'source.'; 
+                var sourceString = sourceIsArray ? 'source' : 'source.'; 
                 value = eval(sourceString + path);    
             }
             else {
                 value = source;
             }
             //todo : apply converter and stringformat
+  			if (converter != undefined) {
+                value = eval(converter+"(value)");
+            }
 
             if (mode == "OneWay") {
-                BindingTools.Bindings.AddBinding(dataContextObject, path, node as HTMLElement);
+                BindingTools.Bindings.CreateBinding(dataContextObject, path, node as HTMLElement);
             } else if (mode == "TwoWay") {
-                BindingTools.Bindings.AddBinding(dataContextObject, path, node as HTMLElement);
+                var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, node as HTMLElement);
                 //TODO
                 //if node is input and mode == twoway then attach events
+                var element = node as HTMLElement;
+                if (element as HTMLInputElement != null)
+                {
+                    element.onchange = () => {
+                        if (!sourceIsArray) {
+                            eval("dataContextObject." + path + "=element.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent();");
+                        }                        
+                    };
+                }
             }
             if (hasSideEffects && allowSideEffects)
             {
@@ -367,6 +400,6 @@ module SilverScriptTools {
 }
 
 $(() => {
-    SilverScriptTools.BindingTools.SetBindingsRecursively(document.body);
+    SS.BindingTools.SetBindingsRecursively(document.body);
 });
 

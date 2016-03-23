@@ -1,6 +1,6 @@
 ﻿
 // Module
-module SilverScriptTools {
+module SS {
     
     //function Querystring(qs)
     //{ // optionally pass a querystring to parse

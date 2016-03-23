@@ -11,42 +11,42 @@ interface String {
 
 $.extend(String.prototype, {
     StartWith: function (stringToTest: string): boolean {
-        return SilverScriptTools.StringTools.StartWith(this, stringToTest);
+        return SS.StringTools.StartWith(this, stringToTest);
     }
 });
 
 $.extend(String.prototype, {
     EndWith: function (stringToTest: string): boolean {
-        return SilverScriptTools.StringTools.EndWith(this, stringToTest);
+        return SS.StringTools.EndWith(this, stringToTest);
     }
 });
 
 $.extend(String.prototype, {
     TrimStart: function (toTrim: string): string {
-        return SilverScriptTools.StringTools.TrimStart(this, toTrim);
+        return SS.StringTools.TrimStart(this, toTrim);
     }
 });
 
 $.extend(String.prototype, {
     TrimEnd: function (toTrim: string): string {
-        return SilverScriptTools.StringTools.TrimEnd(this, toTrim);
+        return SS.StringTools.TrimEnd(this, toTrim);
     }
 });
 
 $.extend(String.prototype, {
     TrimEndOnce: function (toTrim: string): string {
-        return SilverScriptTools.StringTools.TrimEndOnce(this, toTrim);
+        return SS.StringTools.TrimEndOnce(this, toTrim);
     }
 });
 
 $.extend(String.prototype, {
     TrimStartOnce: function (toTrim: string): string {
-        return SilverScriptTools.StringTools.TrimStartOnce(this, toTrim);
+        return SS.StringTools.TrimStartOnce(this, toTrim);
     }
 });
 
 
-module SilverScriptTools {
+module SS {
     export class StringTools {
 
 

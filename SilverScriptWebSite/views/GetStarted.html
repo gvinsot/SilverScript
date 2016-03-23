@@ -1,6 +1,6 @@
 ﻿<style type="text/css">
     .auto-style2 {
-        background-color: #66CCFF;
+        background-color: #AADDFF;
     }
 </style>
 <div style="margin: 30px">
@@ -15,31 +15,31 @@
     <br/>
     XAML developers will find it easy to learn using syntax they well know.<br />
     Lets say you defined in your javascript code : <br />
-    <span class="auto-style2"><em><strong>node.attributes["data-context-value"]=myObject; </strong></em></span> <br/>
+    <span class="auto-style2"><em>node.attributes["data-context-value"]=myObject; </em></span> <br/>
     <br />
     Then you can use the following on children nodes:<br />
-    <span class="auto-style2"><strong><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
+    <span class="auto-style2"><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
     &lt;/Button&gt;
-    </em></strong></span><strong><em>
+    </em></span><em>
     <br/>
     <br />
-    </em></strong>As a result, the content of the button will be fill in with the property "name" of myObject.
+    </em>As a result, the content of the button will be fill in with the property "name" of myObject.
     <br />
     You could also just bind one property of the html node by targeting another property :<br/>
-    <span class="auto-style2"><strong><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; &lt;/a&gt; </em></strong></span>
+    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; &lt;/a&gt; </em></span>
     <br />
     This will result in modifying the href attribute with the result of the binding.<br />
     <br />
     We also added many other possibilities like retrieving the data-context directly from the server :<br/>
-    <span class="auto-style2"><strong><em>&lt;div data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/view</em></strong><em><strong>models/mycontroller&quot;&gt;
-    &lt;/div&gt; </strong></em></span><em><strong>
+    <span class="auto-style2"><em>&lt;div data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/view</em><em>models/mycontroller&quot;&gt;
+    &lt;/div&gt; </em></span><em>
     <br class="auto-style2" />
-    </strong></em>
+    </em>
     <br />
 The power of SilverScript comes from the fact that you can mix the approaches :<br />
-    <span class="auto-style2"><strong><em>&lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;</em></strong></span><strong><em><br class="auto-style2"/>
-    </em></strong><span class="auto-style2"><strong><em>&lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;{DataBinding Path=subObject}&quot;&gt;&lt;/button&gt;</em></strong></span><strong><em><br class="auto-style2"/>
-    </em></strong><span class="auto-style2"><strong><em>&lt;/div&gt;</em></strong></span><br />
+    <span class="auto-style2"><em>&lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;</em></span><em><br class="auto-style2"/>
+    </em><span class="auto-style2"><em>&lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;{DataBinding Path=subObject}&quot;&gt;&lt;/button&gt;</em></span><em><br class="auto-style2"/>
+    </em><span class="auto-style2"><em>&lt;/div&gt;</em></span><br />
 
 
 

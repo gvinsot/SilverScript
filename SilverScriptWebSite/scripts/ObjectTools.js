@@ -1,7 +1,7 @@
 ///<reference path="FileTools.ts"/>
 // Module
-var SilverScriptTools;
-(function (SilverScriptTools) {
+var SS;
+(function (SS) {
     //Class
     var ObjectTools = (function () {
         function ObjectTools() {
@@ -24,13 +24,13 @@ var SilverScriptTools;
             return result.length != 0;
         };
         ObjectTools.ConvertJsonToDate = function (sourceString) {
-            var trimed = SilverScriptTools.StringTools.TrimStart(sourceString, "/Date(");
-            trimed = SilverScriptTools.StringTools.TrimEnd(trimed, ")/");
-            trimed = SilverScriptTools.StringTools.TrimEnd(trimed, "+0000");
+            var trimed = SS.StringTools.TrimStart(sourceString, "/Date(");
+            trimed = SS.StringTools.TrimEnd(trimed, ")/");
+            trimed = SS.StringTools.TrimEnd(trimed, "+0000");
             return new Date(parseInt(trimed));
         };
         ObjectTools.ConvertJsonTimeSpanToDate = function (sourceString) {
-            var trimed = SilverScriptTools.StringTools.TrimStart(sourceString, "PT");
+            var trimed = SS.StringTools.TrimStart(sourceString, "PT");
             var hours = 0;
             var minutes = 0;
             var seconds = 0;
@@ -44,7 +44,7 @@ var SilverScriptTools;
                 minutes = parseInt(splitted[0]);
                 trimed = splitted[1];
             }
-            trimed = SilverScriptTools.StringTools.TrimEnd(trimed, "S");
+            trimed = SS.StringTools.TrimEnd(trimed, "S");
             seconds = parseInt(trimed);
             return new Date(hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000);
         };
@@ -94,6 +94,6 @@ var SilverScriptTools;
         };
         return ObjectTools;
     })();
-    SilverScriptTools.ObjectTools = ObjectTools;
-})(SilverScriptTools || (SilverScriptTools = {}));
+    SS.ObjectTools = ObjectTools;
+})(SS || (SS = {}));
 //# sourceMappingURL=ObjectTools.js.map

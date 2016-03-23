@@ -1,35 +1,35 @@
 $.extend(String.prototype, {
     StartWith: function (stringToTest) {
-        return SilverScriptTools.StringTools.StartWith(this, stringToTest);
+        return SS.StringTools.StartWith(this, stringToTest);
     }
 });
 $.extend(String.prototype, {
     EndWith: function (stringToTest) {
-        return SilverScriptTools.StringTools.EndWith(this, stringToTest);
+        return SS.StringTools.EndWith(this, stringToTest);
     }
 });
 $.extend(String.prototype, {
     TrimStart: function (toTrim) {
-        return SilverScriptTools.StringTools.TrimStart(this, toTrim);
+        return SS.StringTools.TrimStart(this, toTrim);
     }
 });
 $.extend(String.prototype, {
     TrimEnd: function (toTrim) {
-        return SilverScriptTools.StringTools.TrimEnd(this, toTrim);
+        return SS.StringTools.TrimEnd(this, toTrim);
     }
 });
 $.extend(String.prototype, {
     TrimEndOnce: function (toTrim) {
-        return SilverScriptTools.StringTools.TrimEndOnce(this, toTrim);
+        return SS.StringTools.TrimEndOnce(this, toTrim);
     }
 });
 $.extend(String.prototype, {
     TrimStartOnce: function (toTrim) {
-        return SilverScriptTools.StringTools.TrimStartOnce(this, toTrim);
+        return SS.StringTools.TrimStartOnce(this, toTrim);
     }
 });
-var SilverScriptTools;
-(function (SilverScriptTools) {
+var SS;
+(function (SS) {
     var StringTools = (function () {
         function StringTools() {
         }
@@ -73,6 +73,6 @@ var SilverScriptTools;
         };
         return StringTools;
     })();
-    SilverScriptTools.StringTools = StringTools;
-})(SilverScriptTools || (SilverScriptTools = {}));
+    SS.StringTools = StringTools;
+})(SS || (SS = {}));
 //# sourceMappingURL=StringTools.js.map

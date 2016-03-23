@@ -1,20 +1,23 @@
 ﻿///
 
 // Module
-module SilverScriptTools {
+module SS {
     export interface delegate {
-        (): void;
+        (context:any, args:any): void;
     }
 
     // Class
     export class EventHandler {
         private _invocationList: delegate[] = [];
+        private _invocationContexts: any[] = [];
         // Constructor
         constructor() {
         }
 
-        public Attach(delegateMethod: delegate): void {
-            this._invocationList[this._invocationList.length] = delegateMethod;
+        public Attach(delegateMethod: delegate, context: any): void {
+            var key = this._invocationList.length;
+            this._invocationList[key] = delegateMethod;
+            this._invocationContexts[key] = context;
         }
 
         public Dettach(delegateMethod: delegate): void {
@@ -25,12 +28,13 @@ module SilverScriptTools {
             }
         }
 
-        public FireEvent(): void {
+        public FireEvent(args:any): void {
             for (var invocationKey in this._invocationList) {
                 var invocation = this._invocationList[invocationKey];
+                var context = this._invocationContexts[invocationKey];
                 if (invocation != null) {
                     try {
-                        invocation();
+                        invocation(context, args);
                     }
                     catch (ex) {
                         console.error(ex);

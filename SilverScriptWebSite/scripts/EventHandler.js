@@ -1,15 +1,18 @@
 ///
 // Module
-var SilverScriptTools;
-(function (SilverScriptTools) {
+var SS;
+(function (SS) {
     // Class
     var EventHandler = (function () {
         // Constructor
         function EventHandler() {
             this._invocationList = [];
+            this._invocationContexts = [];
         }
-        EventHandler.prototype.Attach = function (delegateMethod) {
-            this._invocationList[this._invocationList.length] = delegateMethod;
+        EventHandler.prototype.Attach = function (delegateMethod, context) {
+            var key = this._invocationList.length;
+            this._invocationList[key] = delegateMethod;
+            this._invocationContexts[key] = context;
         };
         EventHandler.prototype.Dettach = function (delegateMethod) {
             for (var key in this._invocationList) {
@@ -18,12 +21,13 @@ var SilverScriptTools;
                 }
             }
         };
-        EventHandler.prototype.FireEvent = function () {
+        EventHandler.prototype.FireEvent = function (args) {
             for (var invocationKey in this._invocationList) {
                 var invocation = this._invocationList[invocationKey];
+                var context = this._invocationContexts[invocationKey];
                 if (invocation != null) {
                     try {
-                        invocation();
+                        invocation(context, args);
                     }
                     catch (ex) {
                         console.error(ex);
@@ -38,6 +42,6 @@ var SilverScriptTools;
         };
         return EventHandler;
     })();
-    SilverScriptTools.EventHandler = EventHandler;
-})(SilverScriptTools || (SilverScriptTools = {}));
+    SS.EventHandler = EventHandler;
+})(SS || (SS = {}));
 //# sourceMappingURL=EventHandler.js.map

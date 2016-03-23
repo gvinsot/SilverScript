@@ -1,6 +1,6 @@
 ﻿///<reference path="libs/jquery.d.ts"/>
 // Module
-module SilverScriptTools {
+module SS {
 
     //Class
     export class FileTools {
@@ -41,7 +41,7 @@ module SilverScriptTools {
                     type: "GET",
                     url: path,
                     cache: false,
-                    async: false,
+                    async: false,                    
                     dataType: 'json',
                     success: function (result) {
                         queryResult = result;
@@ -58,6 +58,31 @@ module SilverScriptTools {
             return queryResult;
         }
 
+        public static PostJsonFile(path: string, postdata:any): any {
+            var queryResult: any;
+
+            jQuery.ajax(
+                {
+                    type: "POST",
+                    url: path,
+                    data: "="+postdata,
+                    cache: false,
+                    async: false,
+                    dataType: 'json',
+                    success: function (result) {
+                        queryResult = result;
+                    },
+                    error: function (msg) {
+                        //queryResult = "ERROR : " + msg;
+                        throw new Error(msg.statusText);
+                    }
+                    //complete:function(data,xhr)
+                    //{
+                    //}
+                });
+
+            return queryResult;
+        }
 
         public static ReadHtmlFile(path: string, delegate = null, delegateParameters: any[] =null): any {
             var queryResult: any;

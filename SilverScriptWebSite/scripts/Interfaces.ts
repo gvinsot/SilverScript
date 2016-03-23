@@ -1,6 +1,6 @@
 ﻿///<reference path="EventHandler.ts" />
 
-module SilverScriptTools {
+module SS {
     // Interface
     export interface IDisposable {
         Dispose(): void;

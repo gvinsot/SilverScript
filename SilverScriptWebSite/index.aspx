@@ -18,10 +18,11 @@
     </div>
     <div style="height: calc(100% - 40px); width: 100%; display: flex">
         <div style="position: relative; background: #66CCFF; height: 100%; width: 200px">
-            <button onclick="SilverScriptTools.BindingTools.SetContent('MainPage','/views/GetStarted.html');" style="width: 100%; height: 40px; display:block">Get Started</button>
-            <button onclick="SilverScriptTools.BindingTools.SetContent('MainPage','/views/Download.html');" style="width: 100%;height: 40px; display:block">Download</button>
-            <button onclick="SilverScriptTools.BindingTools.SetContent('MainPage','/views/Documentation.html');" style="width: 100%; height: 40px; display:block">Documentation</button>
-            <button onclick="SilverScriptTools.BindingTools.SetContent('MainPage','/views/TestPage.html');" style="width: 100%; height: 40px; display:block">Test Page</button>
+            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 100%; height: 40px; display:block">Get Started</button>
+            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/Download.html');" style="width: 100%;height: 40px; display:block">Download</button>
+            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/Documentation.html');" style="width: 100%; height: 40px; display:block">Documentation</button>
+            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/TestPage.html');" style="width: 100%; height: 40px; display:block">Test Page</button>
+            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/TestPageBinding.html');" style="width: 100%; height: 40px; display:block">Test Bindings</button>
 
         </div>
         <div id="MainPage" data-template="/views/GetStarted.html" style="height: 100%; width: calc(100% - 200px); display: flex">

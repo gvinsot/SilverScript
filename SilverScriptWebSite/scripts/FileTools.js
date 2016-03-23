@@ -1,7 +1,7 @@
 ///<reference path="libs/jquery.d.ts"/>
 // Module
-var SilverScriptTools;
-(function (SilverScriptTools) {
+var SS;
+(function (SS) {
     //Class
     var FileTools = (function () {
         function FileTools() {
@@ -49,6 +49,25 @@ var SilverScriptTools;
             });
             return queryResult;
         };
+        FileTools.PostJsonFile = function (path, postdata) {
+            var queryResult;
+            jQuery.ajax({
+                type: "POST",
+                url: path,
+                data: "=" + postdata,
+                cache: false,
+                async: false,
+                dataType: 'json',
+                success: function (result) {
+                    queryResult = result;
+                },
+                error: function (msg) {
+                    //queryResult = "ERROR : " + msg;
+                    throw new Error(msg.statusText);
+                }
+            });
+            return queryResult;
+        };
         FileTools.ReadHtmlFile = function (path, delegate, delegateParameters) {
             if (delegate === void 0) { delegate = null; }
             if (delegateParameters === void 0) { delegateParameters = null; }
@@ -75,6 +94,6 @@ var SilverScriptTools;
         };
         return FileTools;
     })();
-    SilverScriptTools.FileTools = FileTools;
-})(SilverScriptTools || (SilverScriptTools = {}));
+    SS.FileTools = FileTools;
+})(SS || (SS = {}));
 //# sourceMappingURL=FileTools.js.map

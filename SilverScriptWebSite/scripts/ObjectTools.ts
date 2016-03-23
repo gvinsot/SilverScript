@@ -1,6 +1,6 @@
 ﻿///<reference path="FileTools.ts"/>
 // Module
-module SilverScriptTools {
+module SS {
     //Class
     export class ObjectTools {
         static CheckFileAPI(): boolean {

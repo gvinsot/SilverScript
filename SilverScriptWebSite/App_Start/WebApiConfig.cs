@@ -10,12 +10,12 @@ namespace SilverScript
         public static void Register(HttpConfiguration config)
         {
             config.MapHttpAttributeRoutes();
-
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "services/{controller}",
-                defaults: new {}
+                routeTemplate: "viewmodels/{controller}/{id}",
+                defaults: new { controller = "Test", action = "Get", id = RouteParameter.Optional }
             );
+
         }
     }
 }
