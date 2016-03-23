@@ -46,7 +46,9 @@ module SS {
 
         public Dispose(): void {
             this._invocationList = null;
+            this._invocationContexts = null;
             this._invocationList = [];
+            this._invocationContexts = [];
         }
     }
 

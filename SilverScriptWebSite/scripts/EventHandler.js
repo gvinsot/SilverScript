@@ -38,7 +38,9 @@ var SS;
         };
         EventHandler.prototype.Dispose = function () {
             this._invocationList = null;
+            this._invocationContexts = null;
             this._invocationList = [];
+            this._invocationContexts = [];
         };
         return EventHandler;
     })();

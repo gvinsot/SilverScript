@@ -39,6 +39,9 @@ module SS {
             if (this._bindedObject.PropertyChanged != undefined) {
                 (<EventHandler>this._bindedObject.PropertyChanged).Dettach(this.UpdateNodeOnContextChange);
             }
+            this.Path = null;
+            this.Node = null;
+            this._bindedObject = null;
         }
     }
 
@@ -63,7 +66,7 @@ module SS {
             return binding;
         }
 
-        DisposeBindings(node) {
+        DisposeNode(node) {
             if (node.attributes != undefined && node.attributes != null) {
                 if (node.attributes["data-binding-value"] != undefined) {
                     node.attributes["data-binding-value"] = null;
@@ -78,26 +81,32 @@ module SS {
                     node.attributes["data-source-value"] = null;
                 }
                 if (node.attributes["data-binding-ids"] != undefined) {
-                    var bindingsIds = node["data-binding-ids"];
-                    for (var i = 0; i < bindingsIds.length; i++) {
-                        var bindingId = bindingsIds[i];
-                        var binding = <Binding>this.BindingDictionary[bindingId];
-                        binding.Dispose();
-                        binding = null;
-                        this.BindingDictionary[bindingId] = null;
-                    }
+                    var bindingsIds = null;
                 }
+                for (var key in this.BindingDictionary) {
+                    // skip loop if the property is from prototype
+                    if (!this.BindingDictionary.hasOwnProperty(key)) continue;
+
+                    var binding = <Binding>this.BindingDictionary[key];
+                    if (binding.Node!=null && !this.IsAttachedToDOM(binding.Node)) {
+                        binding.Dispose();
+                        delete this.BindingDictionary[key];
+                    }
+                    binding = null;
+                }                
             }          
         }
-        
+
+        IsAttachedToDOM(ref: HTMLElement): boolean {
+            return ref.parentElement == undefined;            
+        } 
     }
 
 
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
 
-
-
+       
         public static ApplyBinding(rootNode: HTMLElement): void {
             if (rootNode.attributes["data-binding"] != undefined) {
                 SS.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"]["nodeValue"], rootNode);
@@ -132,14 +141,15 @@ module SS {
         public static DisposeBindingsRecursively(rootNode: HTMLElement, skiprootNode: boolean = false): void {
             if (rootNode == null)
                 return;
-            if(!skiprootNode)
-                BindingTools.Bindings.DisposeBindings(rootNode);
-
-            var childrenNodes = rootNode.children;
-            var nbChildren = childrenNodes.length;
-            for (var i = 0; i < nbChildren; i++) {
-                var node = <HTMLElement>childrenNodes[i];
-                BindingTools.DisposeBindingsRecursively(node);
+            if (!skiprootNode)
+                BindingTools.Bindings.DisposeNode(rootNode);
+            else {
+                var childrenNodes = rootNode.children;
+                var nbChildren = childrenNodes.length;
+                for (var i = 0; i < nbChildren; i++) {
+                    var node = <HTMLElement>childrenNodes[i];
+                    BindingTools.DisposeBindingsRecursively(node);
+                }
             }
         }
         

@@ -28,6 +28,9 @@ var SS;
             if (this._bindedObject.PropertyChanged != undefined) {
                 this._bindedObject.PropertyChanged.Dettach(this.UpdateNodeOnContextChange);
             }
+            this.Path = null;
+            this.Node = null;
+            this._bindedObject = null;
         };
         return Binding;
     })();
@@ -50,7 +53,7 @@ var SS;
             this.BindingDictionary[bindingId] = binding;
             return binding;
         };
-        BindingGlobalContext.prototype.DisposeBindings = function (node) {
+        BindingGlobalContext.prototype.DisposeNode = function (node) {
             if (node.attributes != undefined && node.attributes != null) {
                 if (node.attributes["data-binding-value"] != undefined) {
                     node.attributes["data-binding-value"] = null;
@@ -65,16 +68,23 @@ var SS;
                     node.attributes["data-source-value"] = null;
                 }
                 if (node.attributes["data-binding-ids"] != undefined) {
-                    var bindingsIds = node["data-binding-ids"];
-                    for (var i = 0; i < bindingsIds.length; i++) {
-                        var bindingId = bindingsIds[i];
-                        var binding = this.BindingDictionary[bindingId];
+                    var bindingsIds = null;
+                }
+                for (var key in this.BindingDictionary) {
+                    // skip loop if the property is from prototype
+                    if (!this.BindingDictionary.hasOwnProperty(key))
+                        continue;
+                    var binding = this.BindingDictionary[key];
+                    if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
                         binding.Dispose();
-                        binding = null;
-                        this.BindingDictionary[bindingId] = null;
+                        delete this.BindingDictionary[key];
                     }
+                    binding = null;
                 }
             }
+        };
+        BindingGlobalContext.prototype.IsAttachedToDOM = function (ref) {
+            return ref.parentElement == undefined;
         };
         return BindingGlobalContext;
     })();
@@ -111,12 +121,14 @@ var SS;
             if (rootNode == null)
                 return;
             if (!skiprootNode)
-                BindingTools.Bindings.DisposeBindings(rootNode);
-            var childrenNodes = rootNode.children;
-            var nbChildren = childrenNodes.length;
-            for (var i = 0; i < nbChildren; i++) {
-                var node = childrenNodes[i];
-                BindingTools.DisposeBindingsRecursively(node);
+                BindingTools.Bindings.DisposeNode(rootNode);
+            else {
+                var childrenNodes = rootNode.children;
+                var nbChildren = childrenNodes.length;
+                for (var i = 0; i < nbChildren; i++) {
+                    var node = childrenNodes[i];
+                    BindingTools.DisposeBindingsRecursively(node);
+                }
             }
         };
         BindingTools.SetBindingsRecursively = function (rootNode, skipCurrentNode) {

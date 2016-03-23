@@ -104,7 +104,8 @@ module SS {
                     },
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
-                        throw new Error(msg.statusText);
+                       // throw new Error(msg.statusText);
+                        console.log(msg.statusText);
                     }                    
                 });
 
