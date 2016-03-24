@@ -4,30 +4,25 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" style="height: 100%">
 <head>
     <meta charset="utf-8" />
-    <title>SilverScript HTML App</title>
+    <title>SilverScript</title>
     <link rel="stylesheet" href="styles/app.css" type="text/css" />
     <script type="text/javascript" src="/scripts/libs/jquery.js"></script>
     <%=Scripts%>
 </head>
 
-<body data-context="/raw/subscriptions.json" style="height: 100%">
+<body>
 
-    <div style="position: relative; padding-left: 17px; padding-top: 6px; font-size: large; width: 100%; background: #000000; height: 40px; color: white">
-        SilverScript
+    <div style="position: relative; padding-left: 17px; padding-top: 6px; font-size: large; width: 100%; background: #000000; height: 55px; color: white">
+        <div style="width:1050px;margin-left:auto;margin-right:auto">
+            <button onclick="SS.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 150px; margin:5px">Get Started</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/Download.html');" style="width: 150px;margin:5px">Download</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/TestLoad.html');" style="width: 150px; margin:5px">Load Test</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/TestBindings.html');" style="width: 180px; margin:5px">Test Bindings</button>
+            </div>
     </div>
-    <div style="height: calc(100% - 40px); width: 100%; display: flex">
-        <div style="position: relative; background: #66CCFF; height: 100%; width: 200px">
-            <button onclick="SS.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 100%; height: 40px; display:block">Get Started</button>
-            <button onclick="SS.SetTemplate('MainPage','/views/Download.html');" style="width: 100%;height: 40px; display:block">Download</button>
-            <button onclick="SS.SetTemplate('MainPage','/views/TestLoad.html');" style="width: 100%; height: 40px; display:block">Load Test</button>
-            <button onclick="SS.SetTemplate('MainPage','/views/TestBindings.html');" style="width: 100%; height: 40px; display:block">Test Bindings</button>
-            <button onclick="SS.SetTemplate('MainPage','/views/Contact.html');" style="width: 100%; height: 40px; display:block">Documentation</button>
-            
-        </div>
-        <div id="MainPage" data-template="/views/GetStarted.html" style="height: 100%; width: calc(100% - 200px); display: flex">
+    <div id="MainPage" data-template="/views/GetStarted.html" style="max-width: 1050px; margin-left:auto;margin-right:auto">
 
-        </div>
-    </div>
+    </div>    
 </body>
 
 </html>

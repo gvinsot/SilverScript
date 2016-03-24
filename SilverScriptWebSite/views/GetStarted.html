@@ -1,48 +1,43 @@
-﻿<style type="text/css">
-    .auto-style2 {
-        background-color: #AADDFF;
-    }
-</style>
-<div style="margin: 30px">
-    <h1>Welcome to SilverScript</h1>
-    <h2>
-        SilverScript is a javascript Framework built to bring WPF/Silverlight binding syntaxes to javascript/typescript world. <br />
+﻿<div style="margin: 30px">
+   <h2> <span style="height:80px"> <img style="float:left"  src="../images/logo.png" />
+       <br /><br />
+           SilverScript is a javascript framework built to bring advanced Xaml binding syntaxes to javascript and typescript.
+       <br /><br />
+        </span>
     </h2>
     <br />
-    Discover the easiest way to develop a website extensively using MVVM development pattern.<br/>
-    SilverScript is designed to reduce significantly the need of creating code by connecting <br />
+    <br />
+    <br />
+    Discover the easiest way to develop a website extensively using MVVM development pattern.
+    SilverScript is designed to reduce significantly the need of creating code by connecting 
     your interface direclty to data sources and bind directly your UI elements. <br/>
-    It supports OneTime, OneWay and TowWay binding modes.<br />
-    Data Templates for items lists are also supported.<br />
+    <br />
+    We support:<br />
+&nbsp;&nbsp;&nbsp; - OneTime, OneWay and TwoWay binding modes.<br />
+    &nbsp;&nbsp;&nbsp; - Data Templates for items lists<br />
+&nbsp;&nbsp;&nbsp; - Converters<br />
+&nbsp;&nbsp;&nbsp; - Multiple Bindings<br />
+&nbsp;&nbsp;&nbsp; - Binding to json sources<br />
+&nbsp;<br />
     We had special attention to avoid memory leaks and performance bottlenecks.
-    <br/>
     XAML developers will find it easy to learn using a familiar syntax.<br />
     <br />
-    For example: lets say you defined in your javascript code : <br />
-    <span class="auto-style2"><em>node.attributes["data-context-value"]=myObject; </em></span> <br/>
+    Set the datacontext <br />
+    <span class="auto-style2"><em>&lt;div data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; </em></span> <br/>
     <br />
-    Then you can use the following on children nodes:<br />
+    Add your bindings<br />
     <span class="auto-style2"><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
     &lt;/Button&gt;
     </em></span><em>
     <br/>
     <br />
-    </em>As a result, the content of the button will be fill in with the property "name" of myObject.
+    </em>Bind a different property<br/>
+    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; My dynamic link &lt;/a&gt; </em></span>
     <br />
-    You could also just bind one property of the html node by targeting another property :<br/>
-    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; link &lt;/a&gt; </em></span>
     <br />
-    This will result in modifying the href attribute with the result of the binding.<br />
-    <br />
-    We also added many other possibilities like retrieving the data-context directly from the server :<br/>
-    <span class="auto-style2"><em>&lt;div data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/view</em><em>models/mycontroller&quot;&gt;
-    &lt;/div&gt; </em></span><em>
-    <br class="auto-style2" />
-    </em>
-    <br />
-The power of SilverScript comes from the fact that you can mix the approaches :<br />
+    Mix syntaxes<br />
     <span class="auto-style2"><em>&lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;</em></span><em><br class="auto-style2"/>
-    </em><span class="auto-style2"><em>&lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;{DataBinding Path=subObject}&quot;&gt;&lt;/button&gt;</em></span><em><br class="auto-style2"/>
+    </em><span class="auto-style2"><em>&nbsp;&nbsp;&nbsp; &lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/mycontroller/{DataBinding Path=id}&quot;&gt;&lt;/button&gt;</em></span><em><br class="auto-style2"/>
     </em><span class="auto-style2"><em>&lt;/div&gt;</em></span><br />
 
 

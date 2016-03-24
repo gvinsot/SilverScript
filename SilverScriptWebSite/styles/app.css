@@ -8,7 +8,8 @@
 
 body
 {
-    font-family: Helvetica, sans-serif;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:lighter;
 }
 
 /*------------------Normalize------------------------------*/
