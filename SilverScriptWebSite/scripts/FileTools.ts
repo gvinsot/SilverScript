@@ -48,7 +48,7 @@ module SS {
                     },
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
-                        throw new Error(msg.statusText);
+                        console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
                     }
                     //complete:function(data,xhr)
                     //{
@@ -74,7 +74,7 @@ module SS {
                     },
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
-                        throw new Error(msg.statusText);
+                        console.log("SS Exception on load " + path+ "   MESSAGE : "+msg.statusText);
                     }
                     //complete:function(data,xhr)
                     //{
@@ -105,7 +105,7 @@ module SS {
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
                        // throw new Error(msg.statusText);
-                        console.log(msg.statusText);
+                        console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
                     }                    
                 });
 

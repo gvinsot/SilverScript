@@ -11,12 +11,12 @@ namespace SilverScript.viewmodels
     public class TestController : ApiController
     {
         // GET: api/Test
-        public IEnumerable<string> Get()
+        public IEnumerable<TestClass> Get()
         {
-            List<string> result = new List<string>();
-            for(int i=0;i<1000;i++)
+            List<TestClass> result = new List<TestClass>();
+            for(int i=0;i<250;i++)
             {
-                result.Add("Blabla_" + i + "_" + Path.GetRandomFileName());
+                result.Add(new TestClass());
             }
 
             return result;
@@ -24,8 +24,10 @@ namespace SilverScript.viewmodels
 
         public class TestClass
         {
-            public string Name = "toto";
-            public int Age = 99;
+            public string FirstName = "FirstName_" + Path.GetRandomFileName();
+            public string LastName = "LastName_"+ Path.GetRandomFileName();
+            public string Address = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(200)+"th " + Path.GetRandomFileName() + " street";
+            public int Age = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(100);
         }
         // GET: api/Test/5
         public TestClass Get(int id)

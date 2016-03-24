@@ -5,7 +5,6 @@
 <head>
     <meta charset="utf-8" />
     <title>SilverScript HTML App</title>
-    <link rel="stylesheet" href="styles/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="styles/app.css" type="text/css" />
     <script type="text/javascript" src="/scripts/libs/jquery.js"></script>
     <%=Scripts%>
@@ -18,12 +17,12 @@
     </div>
     <div style="height: calc(100% - 40px); width: 100%; display: flex">
         <div style="position: relative; background: #66CCFF; height: 100%; width: 200px">
-            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 100%; height: 40px; display:block">Get Started</button>
-            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/Download.html');" style="width: 100%;height: 40px; display:block">Download</button>
-            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/Documentation.html');" style="width: 100%; height: 40px; display:block">Documentation</button>
-            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/TestPage.html');" style="width: 100%; height: 40px; display:block">Test Page</button>
-            <button onclick="SS.BindingTools.SetTemplate('MainPage','/views/TestPageBinding.html');" style="width: 100%; height: 40px; display:block">Test Bindings</button>
-
+            <button onclick="SS.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 100%; height: 40px; display:block">Get Started</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/Download.html');" style="width: 100%;height: 40px; display:block">Download</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/TestLoad.html');" style="width: 100%; height: 40px; display:block">Load Test</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/TestBindings.html');" style="width: 100%; height: 40px; display:block">Test Bindings</button>
+            <button onclick="SS.SetTemplate('MainPage','/views/Contact.html');" style="width: 100%; height: 40px; display:block">Documentation</button>
+            
         </div>
         <div id="MainPage" data-template="/views/GetStarted.html" style="height: 100%; width: calc(100% - 200px); display: flex">
 

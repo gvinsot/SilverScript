@@ -6,15 +6,19 @@
 <div style="margin: 30px">
     <h1>Welcome to SilverScript</h1>
     <h2>
-        SilverScript is a javascript Framework built to bring WPF/Silverlight binding syntaxes to javascript/typescript world. <br /><br />
+        SilverScript is a javascript Framework built to bring WPF/Silverlight binding syntaxes to javascript/typescript world. <br />
     </h2>
     <br />
     Discover the easiest way to develop a website extensively using MVVM development pattern.<br/>
     SilverScript is designed to reduce significantly the need of creating code by connecting <br />
-    your interface direclty to datasources and bind your UI elements to your datasoucres. <br/>
+    your interface direclty to data sources and bind directly your UI elements. <br/>
+    It supports OneTime, OneWay and TowWay binding modes.<br />
+    Data Templates for items lists are also supported.<br />
+    We had special attention to avoid memory leaks and performance bottlenecks.
     <br/>
-    XAML developers will find it easy to learn using syntax they well know.<br />
-    Lets say you defined in your javascript code : <br />
+    XAML developers will find it easy to learn using a familiar syntax.<br />
+    <br />
+    For example: lets say you defined in your javascript code : <br />
     <span class="auto-style2"><em>node.attributes["data-context-value"]=myObject; </em></span> <br/>
     <br />
     Then you can use the following on children nodes:<br />
@@ -26,7 +30,7 @@
     </em>As a result, the content of the button will be fill in with the property "name" of myObject.
     <br />
     You could also just bind one property of the html node by targeting another property :<br/>
-    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; &lt;/a&gt; </em></span>
+    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; link &lt;/a&gt; </em></span>
     <br />
     This will result in modifying the href attribute with the result of the binding.<br />
     <br />

@@ -5,90 +5,10 @@
 ///<reference path="FileTools.ts" />
 var SS;
 (function (SS) {
-    var Binding = (function () {
-        function Binding(path, node, bindedObject) {
-            this.Path = path;
-            this.Node = node;
-            this.SetBindedObject(bindedObject);
-        }
-        Binding.prototype.GetBindedObject = function () {
-            return this._bindedObject;
-        };
-        Binding.prototype.SetBindedObject = function (value) {
-            this._bindedObject = value;
-            if (value.PropertyChanged == undefined) {
-                value.PropertyChanged = new SS.EventHandler();
-            }
-            value.PropertyChanged.Attach(this.UpdateNodeOnContextChange, this);
-        };
-        Binding.prototype.UpdateNodeOnContextChange = function (context, args) {
-            BindingTools.ApplyBinding(context.Node);
-        };
-        Binding.prototype.Dispose = function () {
-            if (this._bindedObject.PropertyChanged != undefined) {
-                this._bindedObject.PropertyChanged.Dettach(this.UpdateNodeOnContextChange);
-            }
-            this.Path = null;
-            this.Node = null;
-            this._bindedObject = null;
-        };
-        return Binding;
-    })();
-    SS.Binding = Binding;
-    var BindingGlobalContext = (function () {
-        function BindingGlobalContext() {
-            this.BindingDictionary = new Object();
-            this.CurrentBindingId = 0;
-        }
-        BindingGlobalContext.prototype.CreateBinding = function (bindedObject, path, node) {
-            if (node["data-binding-ids"] == undefined) {
-                node["data-binding-ids"] = [];
-            }
-            this.CurrentBindingId++;
-            var bindingsIds = node["data-binding-ids"];
-            var length = bindingsIds.length;
-            var bindingId = this.CurrentBindingId;
-            bindingsIds[length] = bindingId;
-            var binding = new Binding(path, node, bindedObject);
-            this.BindingDictionary[bindingId] = binding;
-            return binding;
-        };
-        BindingGlobalContext.prototype.DisposeNode = function (node) {
-            if (node.attributes != undefined && node.attributes != null) {
-                if (node.attributes["data-binding-value"] != undefined) {
-                    node.attributes["data-binding-value"] = null;
-                }
-                if (node.attributes["data-context-value"] != undefined) {
-                    node.attributes["data-context-value"] = null;
-                }
-                if (node.attributes["data-template-value"] != undefined) {
-                    node.attributes["data-template-value"] = null;
-                }
-                if (node.attributes["data-source-value"] != undefined) {
-                    node.attributes["data-source-value"] = null;
-                }
-                if (node.attributes["data-binding-ids"] != undefined) {
-                    var bindingsIds = null;
-                }
-                for (var key in this.BindingDictionary) {
-                    // skip loop if the property is from prototype
-                    if (!this.BindingDictionary.hasOwnProperty(key))
-                        continue;
-                    var binding = this.BindingDictionary[key];
-                    if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
-                        binding.Dispose();
-                        delete this.BindingDictionary[key];
-                    }
-                    binding = null;
-                }
-            }
-        };
-        BindingGlobalContext.prototype.IsAttachedToDOM = function (ref) {
-            return ref.parentElement == undefined;
-        };
-        return BindingGlobalContext;
-    })();
-    SS.BindingGlobalContext = BindingGlobalContext;
+    function SetTemplate(targetNode, uri) {
+        SS.BindingTools.SetTemplate(targetNode, uri);
+    }
+    SS.SetTemplate = SetTemplate;
     var BindingTools = (function () {
         function BindingTools() {
         }
@@ -180,10 +100,19 @@ var SS;
                 //lets loop through context items
                 for (var i = 0; i < itemsLength; i++) {
                     var copyString = (new String(templateString)).toString();
-                    var wrapper = document.createElement('div');
+                    var wrapper;
+                    if (copyString.StartWith("<tr") || copyString.StartWith("<tr"))
+                        wrapper = document.createElement('table');
+                    else
+                        wrapper = document.createElement('div');
                     wrapper.innerHTML = copyString;
                     var result = wrapper.firstChild;
-                    result.attributes["data-context-value"] = items[i];
+                    if (result.attributes != undefined) {
+                        result.attributes["data-context-value"] = items[i];
+                    }
+                    else {
+                        console.log("SS Exception: your element type is currently not supported for an item template");
+                    }
                     node.appendChild(result);
                 }
                 BindingTools.SetBindingsRecursively(node, true);
@@ -339,7 +268,7 @@ var SS;
                 if (element != null) {
                     element.onchange = function () {
                         if (!sourceIsArray) {
-                            eval("dataContextObject." + path + "=element.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent();");
+                            eval("dataContextObject." + path + "=element.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);");
                         }
                     };
                 }
@@ -354,7 +283,7 @@ var SS;
             }
             return value;
         };
-        BindingTools.Bindings = new BindingGlobalContext();
+        BindingTools.Bindings = new SS.BindingGlobalContext();
         return BindingTools;
     })();
     SS.BindingTools = BindingTools;
