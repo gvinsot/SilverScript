@@ -1,31 +1,25 @@
 ﻿<div style="margin: 30px">
-   <h2> <span style="height:80px"> <img style="float:left"  src="../images/logo.png" />
-       <br /><br />
-           SilverScript is a javascript framework built to bring advanced Xaml binding syntaxes to javascript and typescript.
-       <br /><br />
+   <h1>  <img style="vertical-align:middle; float:left;height:50px"  src="../images/logo.png" /><span style="vertical-align:middle; margin-left:20px;height:50px;line-height:50px">
+           Get Started.
         </span>
-    </h2>
+    </h1>
+    <br /><br />
+    Reference the silverscript.js<br />
+    <a href="http://silverscript.azurewebsites.net/scripts/silverscript.js">http://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
+    <a href="https://silverscript.azurewebsites.net/scripts/silverscript.js">https://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
+    or download the sample project to get the TypeScript definitions.
     <br />
     <br />
-    <br />
-    Discover the easiest way to develop a website extensively using MVVM development pattern.
-    SilverScript is designed to reduce significantly the need of creating code by connecting 
-    your interface direclty to data sources and bind directly your UI elements. <br/>
-    <br />
-    We support:<br />
-&nbsp;&nbsp;&nbsp; - OneTime, OneWay and TwoWay binding modes.<br />
-    &nbsp;&nbsp;&nbsp; - Data Templates for items lists<br />
-&nbsp;&nbsp;&nbsp; - Converters<br />
-&nbsp;&nbsp;&nbsp; - Multiple Bindings<br />
-&nbsp;&nbsp;&nbsp; - Binding to json sources<br />
-&nbsp;<br />
-    We had special attention to avoid memory leaks and performance bottlenecks.
-    XAML developers will find it easy to learn using a familiar syntax.<br />
     <br />
     Set the datacontext <br />
-    <span class="auto-style2"><em>&lt;div data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; </em></span> <br/>
+    <span class="auto-style2"><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; </em></span> <br/>
+    or from javascript<br />
+    <em>$(&#39;testDiv&#39;).attributes[&quot;data-context-value&quot;]=myObject;</em><br />
+    or inside another datacontext<br />
+    <span class="auto-style2"><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;{Binding Path=myProperty}&quot;&gt;...&lt;/div&gt; </em></span> 
     <br />
-    Add your bindings<br />
+    <br />
+    Add your binding to your content (OneTime binding by default)<br />
     <span class="auto-style2"><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
     &lt;/Button&gt;
     </em></span><em>
@@ -39,6 +33,23 @@
     <span class="auto-style2"><em>&lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;</em></span><em><br class="auto-style2"/>
     </em><span class="auto-style2"><em>&nbsp;&nbsp;&nbsp; &lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/mycontroller/{DataBinding Path=id}&quot;&gt;&lt;/button&gt;</em></span><em><br class="auto-style2"/>
     </em><span class="auto-style2"><em>&lt;/div&gt;</em></span><br />
+
+
+
+    <br />
+    Data templates for items lists<br />
+    <br />
+    Converters<br />
+    <br />
+    Bind to another UI element<br />
+    <br />
+    OneWay binding<br />
+    <br />
+    TwoWay binding<br />
+    <br />
+    Multiple bindings<br />
+    <br />
+    <br />
 
 
 

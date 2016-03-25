@@ -14,13 +14,14 @@
 
     <div style="position: relative; padding-left: 17px; padding-top: 6px; font-size: large; width: 100%; background: #000000; height: 55px; color: white">
         <div style="width:1050px;margin-left:auto;margin-right:auto">
+            <button onclick="SS.SetTemplate('MainPage','/views/WhatIsIt.html');" style="width: 150px; margin:5px">What is it ?</button>
             <button onclick="SS.SetTemplate('MainPage','/views/GetStarted.html');" style="width: 150px; margin:5px">Get Started</button>
             <button onclick="SS.SetTemplate('MainPage','/views/Download.html');" style="width: 150px;margin:5px">Download</button>
             <button onclick="SS.SetTemplate('MainPage','/views/TestLoad.html');" style="width: 150px; margin:5px">Load Test</button>
             <button onclick="SS.SetTemplate('MainPage','/views/TestBindings.html');" style="width: 180px; margin:5px">Test Bindings</button>
             </div>
     </div>
-    <div id="MainPage" data-template="/views/GetStarted.html" style="max-width: 1050px; margin-left:auto;margin-right:auto">
+    <div id="MainPage" data-template="/views/WhatIsIt.html" style="max-width: 1050px; margin-left:auto;margin-right:auto">
 
     </div>    
 </body>
