@@ -15,9 +15,7 @@ module SS {
        
         public static ApplyBinding(rootNode: HTMLElement): void {
             if (rootNode.attributes["data-binding"] != undefined) {
-                SS.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"]["nodeValue"], rootNode);
-                
-               
+                SS.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"].nodeValue, rootNode);                             
             }
             if (rootNode.attributes["data-onload"] != undefined) {
                 eval(rootNode.attributes["data-onload"].nodeValue);
@@ -26,7 +24,7 @@ module SS {
 
         public static ApplyTemplate(rootNode: Node): void {
             if (rootNode.attributes["data-template"] != undefined) {
-                SS.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"]["nodeValue"], rootNode);
+                SS.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"].nodeValue, rootNode);
             }
         }
 
@@ -52,8 +50,9 @@ module SS {
             else {
                 var childrenNodes = rootNode.children;
                 var nbChildren = childrenNodes.length;
+                var node: HTMLElement;
                 for (var i = 0; i < nbChildren; i++) {
-                    var node = <HTMLElement>childrenNodes[i];
+                    node = <HTMLElement>childrenNodes[i];
                     BindingTools.DisposeBindingsRecursively(node);
                 }
             }
@@ -74,8 +73,7 @@ module SS {
             var childrenNodes = rootNode.children;
             var nbChildren = childrenNodes.length;
             for (var i = 0; i < nbChildren; i++) {
-                var node = <HTMLElement>childrenNodes[i];
-                BindingTools.SetBindingsRecursively(node);
+                BindingTools.SetBindingsRecursively(<HTMLElement>childrenNodes[i]);
             }
         }
 
@@ -103,43 +101,44 @@ module SS {
             FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [ node, dataContextObject]);            
         }
 
-        private static EvaluateTemplatePart2(templateString: string, args: any[]) {
+        private static EvaluateTemplatePart2(templateString: string, args: any[]):void {
             var node: Node = args[0];
-            var dataContextObject: Object = args[1];
             node["data-template-value"] = templateString;
             var dataSourceAttribute = node.attributes["data-source"];
+            var htmlnode = <HTMLElement>node;
+                
             if (dataSourceAttribute != undefined) {
 
+                var dataContextObject: Object = args[1];
+                var startTime = (new Date()).getTime();            
                 var items = BindingTools.EvaluateExpression(dataSourceAttribute.nodeValue, dataContextObject, node);
                 node["data-source-value"] = items;
                 var itemsLength = items.length;
+                var resultString = "";
+                
                 //lets loop through context items
                 for (var i = 0; i < itemsLength; i++) {
-
-                    var copyString = (new String(templateString)).toString();
-                    var wrapper: HTMLElement;
-                    if (copyString.StartWith("<tr") || copyString.StartWith("<tr"))
-                        wrapper = document.createElement('table');
-                    else
-                        wrapper = document.createElement('div');
-                    wrapper.innerHTML = copyString;
-                    var result = wrapper.firstChild;
-                    if (result.attributes != undefined) {
-                        result.attributes["data-context-value"] = items[i];
-                    }
-                    else
-                    {
-                        console.log("SS Exception: your element type is currently not supported for an item template");
-                    }
-                    node.appendChild(result);                    
+                    resultString = resultString.concat(templateString);
                 }
-                BindingTools.SetBindingsRecursively(node as HTMLElement,true);
+
+                // htmlnode.innerHTML = resultString;
+                var result = $(resultString);
+                //var children = htmlnode.childNodes[0].childNodes;
+                for (var i = 0; i < itemsLength; i++) {
+                    result[i].attributes["data-context-value"] = items[i];
+                    BindingTools.SetBindingsRecursively(result[i], true);
+                }
+                result.appendTo(htmlnode);                                
+
+                var nbMilliseconds = (new Date()).getTime() - startTime;
+                console.log("Apply templates: " + nbMilliseconds + "ms");
             }
             else {
-                node.textContent = "";
-                (<HTMLElement>node).innerHTML = templateString;
-                BindingTools.SetBindingsRecursively(node as HTMLElement, true);
+                htmlnode.textContent = "";
+                htmlnode.innerHTML = templateString;
+                BindingTools.SetBindingsRecursively(htmlnode, true);
             }
+            
         }
         
         private static EvaluateDataContext(node): Object {
@@ -163,9 +162,7 @@ module SS {
 
 
         private static EvaluateBinding(bindingExpression: string, node: Node): any {
-            var dataContextObject = BindingTools.EvaluateDataContext(node);
-
-            return BindingTools.EvaluateExpression(bindingExpression, dataContextObject, node)
+            return BindingTools.EvaluateExpression(bindingExpression, BindingTools.EvaluateDataContext(node), node)
         }
        
         private static EvaluateExpression(expression: string, datacontext: any, contextNode: Node, expectObjectResult: boolean = true): any {
@@ -184,10 +181,11 @@ module SS {
             var nbElements = elements.length;
 
             if (isHttpLink == true) {
-                
+                var bindingString = "";
+                var transformed = "";
                 for (var i = 0; i < nbElements; i++) {
-                    var bindingString = elements[i];
-                    var transformed = BindingTools.EvaluateBindingExpression(bindingString,datacontext, parent);
+                    bindingString = elements[i];
+                    transformed = BindingTools.EvaluateBindingExpression(bindingString,datacontext, parent);
                     expression = expression.replace(bindingString, transformed);
                 }
                 
@@ -228,6 +226,7 @@ module SS {
 
             var parameters = parametersString.split(",");
             var elementName = null;
+            var htmlElement = node as HTMLElement;
             var path = undefined;
             var source = dataContextObject;
             var converter = undefined;
@@ -237,13 +236,14 @@ module SS {
             var destination = "Content";
             var hasSideEffects = false;
             var pathDefined = false;
+            var param = [];
             for (var i = 0; i < parameters.length; i++) {
-                var param = parameters[i].split('=');
+                param = parameters[i].split('=');
 
                 if (param.length == 1) {
                     path = param[0];
                 }
-                else
+                else {
                     switch (param[0]) {
                         case "Path":
                             path = param[1];
@@ -280,41 +280,37 @@ module SS {
                         default:
                             break;
                     }
+                }
             }
             var value;
             var sourceIsArray= Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
-                var sourceString = sourceIsArray ? 'source' : 'source.'; 
-                value = eval(sourceString + path);    
+                value = eval((sourceIsArray ? 'source' : 'source.') + path);    
             }
             else {
                 value = source;
             }
-            //todo : apply converter and stringformat
+            //apply converter and stringformat
   			if (converter != undefined) {
                 value = eval(converter+"(value)");
             }
 
             if (mode == "OneWay") {
-                BindingTools.Bindings.CreateBinding(dataContextObject, path, node as HTMLElement);
+                BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
             } else if (mode == "TwoWay") {
-                var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, node as HTMLElement);
-                //TODO
-                //if node is input and mode == twoway then attach events
-                var element = node as HTMLElement;
-                if (element as HTMLInputElement != null)
-                {
-                    element.onchange = () => {
-                        if (!sourceIsArray) {
-                            eval("dataContextObject." + path + "=element.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);");
-                        }                        
-                    };
-                }
+                var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
+                htmlElement.onchange = () => {
+                    if (!sourceIsArray) {
+                        var evalString = "dataContextObject." + path + "=htmlElement.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);";
+                        (new Function(evalString))();                       
+                    }                        
+                };
+                
             }
             if (hasSideEffects && allowSideEffects)
             {
                 if (destination == "Content") {
-                    (<HTMLElement>node).innerHTML = value;
+                    htmlElement.innerHTML = value;
                 }
                 else {
                     node.attributes[destination].value = value;
