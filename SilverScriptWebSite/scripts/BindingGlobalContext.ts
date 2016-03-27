@@ -26,34 +26,40 @@ module SS {
             return binding;
         }
 
-        DisposeNode(node) {
+        DisposeNodeBindings(node) {
             if (node.attributes != undefined && node.attributes != null) {
-                if (node.attributes["data-binding-value"] != undefined) {
-                    node.attributes["data-binding-value"] = null;
-                }
-                if (node.attributes["data-context-value"] != undefined) {
-                    node.attributes["data-context-value"] = null;
-                }
-                if (node.attributes["data-template-value"] != undefined) {
-                    node.attributes["data-template-value"] = null;
-                }
-                if (node.attributes["data-source-value"] != undefined) {
-                    node.attributes["data-source-value"] = null;
-                }
-                if (node.attributes["data-binding-ids"] != undefined) {
-                    var bindingsIds = null;
-                }
-                for (var key in this.BindingDictionary) {
-                    // skip loop if the property is from prototype
-                    if (!this.BindingDictionary.hasOwnProperty(key)) continue;
+                //delete node["data-binding-value"];
+                delete node["data-context-value"];
+                delete node["data-template-value"];
+                delete node["data-source-value"];
 
-                    var binding = <Binding>this.BindingDictionary[key];
-                    if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
-                        binding.Dispose();
-                        delete this.BindingDictionary[key];
+                if (node["data-binding-ids"] != undefined) {
+                    var bindingsIds = node["data-binding-ids"];
+                    for (var bindingId in bindingsIds) {
+                        var binding = this.BindingDictionary[bindingId] as Binding;
+                        if (binding.Node != null) {
+                            binding.Dispose();
+                            delete this.BindingDictionary[bindingId];
+                            binding = null;
+                        }
                     }
-                    binding = null;
+                    delete node["data-binding-ids"];
+                }                
+            }
+        }
+
+        GarbageCollectBindings(): void
+        {
+            for (var key in this.BindingDictionary) {
+                // skip loop if the property is from prototype
+                if (!this.BindingDictionary.hasOwnProperty(key)) continue;
+
+                var binding = <Binding>this.BindingDictionary[key];
+                if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
+                    binding.Dispose();
+                    delete this.BindingDictionary[key];
                 }
+                binding = null;
             }
         }
 

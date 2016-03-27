@@ -33,7 +33,7 @@ module SS {
             return absolteUrl + relativeUrl;
         }
 
-        public static ReadJsonFile(path: string): any {
+        public static ReadJsonFile(path: string, callbackctxt: any, callback: delegate): void {
             var queryResult: any;
 
             jQuery.ajax(
@@ -41,24 +41,24 @@ module SS {
                     type: "GET",
                     url: path,
                     cache: false,
-                    async: false,                    
+                    async: true,                    
                     dataType: 'json',
                     success: function (result) {
-                        queryResult = result;
+                        callback(callbackctxt,result);
                     },
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
                         console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
+                        callback(callbackctxt, null);
                     }
                     //complete:function(data,xhr)
                     //{
                     //}
                 });
-
-            return queryResult;
+            
         }
 
-        public static PostJsonFile(path: string, postdata:any): any {
+        public static PostJsonFile(path: string, postdata: any, callbackctxt:any, callback: delegate): void {
             var queryResult: any;
 
             jQuery.ajax(
@@ -67,21 +67,17 @@ module SS {
                     url: path,
                     data: "="+postdata,
                     cache: false,
-                    async: false,
+                    async: true,
                     dataType: 'json',
                     success: function (result) {
-                        queryResult = result;
+                        callback(callbackctxt, result);
                     },
                     error: function (msg) {
                         //queryResult = "ERROR : " + msg;
-                        console.log("SS Exception on load " + path+ "   MESSAGE : "+msg.statusText);
+                        console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
+                        callback(callbackctxt, null);
                     }
-                    //complete:function(data,xhr)
-                    //{
-                    //}
                 });
-
-            return queryResult;
         }
 
         public static ReadHtmlFile(path: string, delegate = null, delegateParameters: any[] =null): any {

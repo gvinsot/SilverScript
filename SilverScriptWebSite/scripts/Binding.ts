@@ -27,8 +27,12 @@ module SS {
 
         UpdateNodeOnContextChange(context: Binding, args: any): void {
             var path = <string>args;
-            if (context.Path.indexOf(path)>=0)
-                BindingTools.ApplyBinding(context.Node);
+            if (context.Path.indexOf(path) >= 0) {
+                var databinding = context.Node.attributes["data-binding"];
+                if (databinding != undefined) {
+                    SS.BindingTools.EvaluateBinding(databinding.value, context.Node, (a, b) => { });
+                }
+            }                
         }
 
         constructor(path: string, node: HTMLElement, bindedObject: any) {

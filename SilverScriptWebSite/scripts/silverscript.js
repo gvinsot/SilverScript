@@ -149,40 +149,40 @@ var SS;
         FileTools.UrlCombine = function (absolteUrl, relativeUrl) {
             return absolteUrl + relativeUrl;
         };
-        FileTools.ReadJsonFile = function (path) {
+        FileTools.ReadJsonFile = function (path, callbackctxt, callback) {
             var queryResult;
             jQuery.ajax({
                 type: "GET",
                 url: path,
                 cache: false,
-                async: false,
+                async: true,
                 dataType: 'json',
                 success: function (result) {
-                    queryResult = result;
+                    callback(callbackctxt, result);
                 },
                 error: function (msg) {
                     console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
+                    callback(callbackctxt, null);
                 }
             });
-            return queryResult;
         };
-        FileTools.PostJsonFile = function (path, postdata) {
+        FileTools.PostJsonFile = function (path, postdata, callbackctxt, callback) {
             var queryResult;
             jQuery.ajax({
                 type: "POST",
                 url: path,
                 data: "=" + postdata,
                 cache: false,
-                async: false,
+                async: true,
                 dataType: 'json',
                 success: function (result) {
-                    queryResult = result;
+                    callback(callbackctxt, result);
                 },
                 error: function (msg) {
                     console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
+                    callback(callbackctxt, null);
                 }
             });
-            return queryResult;
         };
         FileTools.ReadHtmlFile = function (path, delegate, delegateParameters) {
             if (delegate === void 0) { delegate = null; }
@@ -231,8 +231,12 @@ var SS;
         };
         Binding.prototype.UpdateNodeOnContextChange = function (context, args) {
             var path = args;
-            if (context.Path.indexOf(path) >= 0)
-                SS.BindingTools.ApplyBinding(context.Node);
+            if (context.Path.indexOf(path) >= 0) {
+                var databinding = context.Node.attributes["data-binding"];
+                if (databinding != undefined) {
+                    SS.BindingTools.EvaluateBinding(databinding.value, context.Node, function (a, b) { });
+                }
+            }
         };
         Binding.prototype.Dispose = function () {
             if (this._bindedObject.PropertyChanged != undefined) {
@@ -266,33 +270,35 @@ var SS;
             this.BindingDictionary[bindingId] = binding;
             return binding;
         };
-        BindingGlobalContext.prototype.DisposeNode = function (node) {
+        BindingGlobalContext.prototype.DisposeNodeBindings = function (node) {
             if (node.attributes != undefined && node.attributes != null) {
-                if (node.attributes["data-binding-value"] != undefined) {
-                    node.attributes["data-binding-value"] = null;
-                }
-                if (node.attributes["data-context-value"] != undefined) {
-                    node.attributes["data-context-value"] = null;
-                }
-                if (node.attributes["data-template-value"] != undefined) {
-                    node.attributes["data-template-value"] = null;
-                }
-                if (node.attributes["data-source-value"] != undefined) {
-                    node.attributes["data-source-value"] = null;
-                }
-                if (node.attributes["data-binding-ids"] != undefined) {
-                    var bindingsIds = null;
-                }
-                for (var key in this.BindingDictionary) {
-                    if (!this.BindingDictionary.hasOwnProperty(key))
-                        continue;
-                    var binding = this.BindingDictionary[key];
-                    if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
-                        binding.Dispose();
-                        delete this.BindingDictionary[key];
+                delete node["data-context-value"];
+                delete node["data-template-value"];
+                delete node["data-source-value"];
+                if (node["data-binding-ids"] != undefined) {
+                    var bindingsIds = node["data-binding-ids"];
+                    for (var bindingId in bindingsIds) {
+                        var binding = this.BindingDictionary[bindingId];
+                        if (binding.Node != null) {
+                            binding.Dispose();
+                            delete this.BindingDictionary[bindingId];
+                            binding = null;
+                        }
                     }
-                    binding = null;
+                    delete node["data-binding-ids"];
                 }
+            }
+        };
+        BindingGlobalContext.prototype.GarbageCollectBindings = function () {
+            for (var key in this.BindingDictionary) {
+                if (!this.BindingDictionary.hasOwnProperty(key))
+                    continue;
+                var binding = this.BindingDictionary[key];
+                if (binding.Node != null && !this.IsAttachedToDOM(binding.Node)) {
+                    binding.Dispose();
+                    delete this.BindingDictionary[key];
+                }
+                binding = null;
             }
         };
         BindingGlobalContext.prototype.IsAttachedToDOM = function (ref) {
@@ -311,43 +317,34 @@ var SS;
     var BindingTools = (function () {
         function BindingTools() {
         }
-        BindingTools.ApplyBinding = function (rootNode) {
-            if (rootNode.attributes["data-binding"] != undefined) {
-                SS.BindingTools.EvaluateBinding(rootNode.attributes["data-binding"].nodeValue, rootNode);
-            }
-            if (rootNode.attributes["data-onload"] != undefined) {
-                eval(rootNode.attributes["data-onload"].nodeValue);
-            }
-        };
-        BindingTools.ApplyTemplate = function (rootNode) {
-            if (rootNode.attributes["data-template"] != undefined) {
-                SS.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"].nodeValue, rootNode);
-            }
-        };
         BindingTools.NewDataContextObject = function (rootNode) {
-            if (rootNode.attributes["data-template-value"] == undefined) {
-                rootNode.attributes["data-template-value"] = new Object();
+            if (rootNode["data-template-value"] == undefined) {
+                rootNode["data-template-value"] = new Object();
             }
         };
         BindingTools.SetTemplate = function (targetNode, uri) {
             var node = document.getElementById(targetNode);
-            BindingTools.DisposeBindingsRecursively(node, true);
+            BindingTools.Bindings.GarbageCollectBindings();
             node.attributes["data-template"] = uri;
-            SS.BindingTools.ApplyTemplate(node);
+            SS.BindingTools.EvaluateTemplate(uri, node);
+        };
+        BindingTools.DisposeBindings = function (rootNode, skiprootNode) {
+            if (skiprootNode === void 0) { skiprootNode = false; }
+            BindingTools.DisposeBindingsRecursively(rootNode, skiprootNode);
+            BindingTools.Bindings.GarbageCollectBindings();
         };
         BindingTools.DisposeBindingsRecursively = function (rootNode, skiprootNode) {
             if (skiprootNode === void 0) { skiprootNode = false; }
             if (rootNode == null)
                 return;
             if (!skiprootNode)
-                BindingTools.Bindings.DisposeNode(rootNode);
+                BindingTools.Bindings.DisposeNodeBindings(rootNode);
             else {
-                var childrenNodes = rootNode.children;
-                var nbChildren = childrenNodes.length;
-                var node;
-                for (var i = 0; i < nbChildren; i++) {
-                    node = childrenNodes[i];
-                    BindingTools.DisposeBindingsRecursively(node);
+                var rootNodeChildren = rootNode.children;
+                for (var key in rootNodeChildren) {
+                    if (!rootNodeChildren.hasOwnProperty(key))
+                        continue;
+                    BindingTools.DisposeBindingsRecursively(rootNodeChildren[key]);
                 }
             }
         };
@@ -356,21 +353,31 @@ var SS;
             if (rootNode == null)
                 return;
             if (!skipCurrentNode) {
-                BindingTools.ApplyBinding(rootNode);
-                if (rootNode.attributes["data-binding"] == undefined && rootNode.attributes["data-template"] != undefined) {
-                    BindingTools.ApplyTemplate(rootNode);
+                var databinding = rootNode.attributes["data-binding"];
+                if (databinding != undefined) {
+                    SS.BindingTools.EvaluateBinding(databinding.value, rootNode, function (ctxt, args) {
+                        BindingTools.SetBindingsOnChildrenNodes(ctxt);
+                    });
+                    return;
+                }
+                else if (rootNode.attributes["data-template"] != undefined) {
+                    SS.BindingTools.EvaluateTemplate(rootNode.attributes["data-template"].value, rootNode);
                     return;
                 }
             }
-            var childrenNodes = rootNode.children;
-            var nbChildren = childrenNodes.length;
-            for (var i = 0; i < nbChildren; i++) {
-                BindingTools.SetBindingsRecursively(childrenNodes[i]);
+            BindingTools.SetBindingsOnChildrenNodes(rootNode);
+        };
+        BindingTools.SetBindingsOnChildrenNodes = function (rootNode) {
+            var rootNodeChildren = rootNode.children;
+            for (var key in rootNodeChildren) {
+                if (!rootNodeChildren.hasOwnProperty(key))
+                    continue;
+                BindingTools.SetBindingsRecursively(rootNodeChildren[key]);
             }
         };
         BindingTools.GetParentContext = function (node) {
             var parentNode = node;
-            while (parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode.attributes["data-context-value"] == undefined) {
+            while (parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode["data-context-value"] == undefined) {
                 parentNode = parentNode.parentNode;
             }
             if (parentNode.attributes == null)
@@ -381,10 +388,12 @@ var SS;
             var dataTemplateAttribute = node.attributes["data-template"];
             if (dataTemplateAttribute == undefined)
                 return;
-            var dataTemplateAttributreValue = dataTemplateAttribute.nodeValue == undefined ? dataTemplateAttribute : dataTemplateAttribute.nodeValue;
-            var dataContextObject = BindingTools.EvaluateDataContext(node);
-            var templateExpression = BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, false);
-            SS.FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject]);
+            var dataTemplateAttributreValue = dataTemplateAttribute.value == undefined ? dataTemplateAttribute : dataTemplateAttribute.value;
+            BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
+                BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, function (ctxt2, templateExpression) {
+                    SS.FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject]);
+                }, false);
+            });
         };
         BindingTools.EvaluateTemplatePart2 = function (templateString, args) {
             var node = args[0];
@@ -394,44 +403,64 @@ var SS;
             if (dataSourceAttribute != undefined) {
                 var dataContextObject = args[1];
                 var startTime = (new Date()).getTime();
-                var items = BindingTools.EvaluateExpression(dataSourceAttribute.nodeValue, dataContextObject, node);
-                node["data-source-value"] = items;
-                var itemsLength = items.length;
-                var resultString = "";
-                for (var i = 0; i < itemsLength; i++) {
-                    resultString = resultString.concat(templateString);
-                }
-                var result = $(resultString);
-                for (var i = 0; i < itemsLength; i++) {
-                    result[i].attributes["data-context-value"] = items[i];
-                    BindingTools.SetBindingsRecursively(result[i], true);
-                }
-                result.appendTo(htmlnode);
-                var nbMilliseconds = (new Date()).getTime() - startTime;
-                console.log("Apply templates: " + nbMilliseconds + "ms");
+                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, function (ctxt, items) {
+                    node["data-source-value"] = items;
+                    var itemsLength = items.length;
+                    var resultString = "";
+                    for (var i = 0; i < itemsLength; i++) {
+                        resultString = resultString.concat(templateString);
+                    }
+                    var result = $(resultString);
+                    for (var i = 0; i < itemsLength; i++) {
+                        var subnode = result[i];
+                        subnode["data-context-value"] = items[i];
+                        BindingTools.SetBindingsRecursively(subnode);
+                    }
+                    $(htmlnode).append(result);
+                    var nbMilliseconds = (new Date()).getTime() - startTime;
+                    console.log("Apply templates: " + nbMilliseconds + "ms");
+                });
             }
             else {
-                htmlnode.textContent = "";
                 htmlnode.innerHTML = templateString;
                 BindingTools.SetBindingsRecursively(htmlnode, true);
             }
         };
-        BindingTools.EvaluateDataContext = function (node) {
+        BindingTools.EvaluateDataContext = function (node, callback) {
             var contextNode = BindingTools.GetParentContext(node);
-            if (contextNode == undefined)
-                return null;
-            if (contextNode.attributes["data-context-value"] != undefined)
-                return contextNode.attributes["data-context-value"];
-            var contextExpression = contextNode.attributes["data-context"].nodeValue;
-            var datacontext = BindingTools.EvaluateDataContext(contextNode.parentNode);
-            var result = BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode);
-            contextNode.attributes["data-context-value"] = result;
-            return result;
+            if (contextNode == undefined) {
+                callback(node, null);
+                return;
+            }
+            var datacontextvalue = contextNode["data-context-value"];
+            if (datacontextvalue != undefined) {
+                callback(node, datacontextvalue);
+                return;
+            }
+            var datacontextloading = contextNode["data-context-value-loading"];
+            if (datacontextloading != null) {
+                datacontextloading.Attach(callback, node);
+                return;
+            }
+            contextNode["data-context-value-loading"] = new SS.EventHandler();
+            var contextExpression = contextNode.attributes["data-context"].value;
+            BindingTools.EvaluateDataContext(contextNode.parentNode, function (ctxt, datacontext) {
+                BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, function (ctxt, datacontextvalue) {
+                    ctxt["data-context-value"] = datacontextvalue;
+                    var contextloading = ctxt["data-context-value-loading"];
+                    contextloading.FireEvent(datacontextvalue);
+                    contextloading.Dispose();
+                    delete ctxt["data-context-value-loading"];
+                    callback(node, datacontextvalue);
+                });
+            });
         };
-        BindingTools.EvaluateBinding = function (bindingExpression, node) {
-            return BindingTools.EvaluateExpression(bindingExpression, BindingTools.EvaluateDataContext(node), node);
+        BindingTools.EvaluateBinding = function (bindingExpression, node, callback) {
+            BindingTools.EvaluateDataContext(node, function (ctxt, datacontext) {
+                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, callback);
+            });
         };
-        BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, expectObjectResult) {
+        BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, callback, expectObjectResult) {
             if (expectObjectResult === void 0) { expectObjectResult = true; }
             var isHttpLink = expression.StartWith("/") || expression.StartWith("http://") || expression.StartWith("https://");
             var elements = [];
@@ -445,23 +474,26 @@ var SS;
             var parent = contextNode.parentNode;
             var nbElements = elements.length;
             if (isHttpLink == true) {
-                var bindingString = "";
-                var transformed = "";
-                for (var i = 0; i < nbElements; i++) {
-                    bindingString = elements[i];
-                    transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
+                for (var bindingString in elements) {
+                    var transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
                     expression = expression.replace(bindingString, transformed);
                 }
-                if (!expectObjectResult)
-                    return expression;
+                if (!expectObjectResult) {
+                    callback(contextNode, expression);
+                    return;
+                }
                 else {
-                    if (contextNode.attributes["data-context-post"] != undefined) {
-                        var postExpression = contextNode.attributes["data-context-post"].nodeValue;
-                        var postData = BindingTools.EvaluateExpression(postExpression, datacontext, parent, false);
-                        return SS.FileTools.PostJsonFile(expression, postData);
+                    var datacontextPost = contextNode.attributes["data-context-post"];
+                    if (datacontextPost != undefined) {
+                        var postExpression = datacontextPost.value;
+                        BindingTools.EvaluateExpression(postExpression, datacontext, parent, function (ctxt, postData) {
+                            SS.FileTools.PostJsonFile(expression, postData, ctxt, callback);
+                        }, false);
+                        return;
                     }
                     else {
-                        return SS.FileTools.ReadJsonFile(expression);
+                        SS.FileTools.ReadJsonFile(expression, contextNode, callback);
+                        return;
                     }
                 }
             }
@@ -470,15 +502,13 @@ var SS;
                 for (var i = 0; i < nbElements; i++) {
                     result[i] = BindingTools.EvaluateBindingExpression(elements[i], datacontext, contextNode);
                 }
-                if (result.length == 1)
-                    return result[0];
-                else
-                    return result;
+                callback(contextNode, result.length == 1 ? result[0] : result);
+                return;
             }
             else {
-                return eval(expression);
+                callback(contextNode, eval(expression));
+                return;
             }
-            return null;
         };
         BindingTools.EvaluateBindingExpression = function (bindingExpression, dataContextObject, node, allowSideEffects) {
             if (allowSideEffects === void 0) { allowSideEffects = true; }
@@ -512,7 +542,6 @@ var SS;
                             source = document.getElementsByName(param[1]);
                             break;
                         case "Source":
-                            source = BindingTools.EvaluateBinding(param[1], node);
                             break;
                         case "Destination":
                             destination = param[1];
@@ -535,6 +564,9 @@ var SS;
                     }
                 }
             }
+            BindingTools.ComputeBinding(source, destination, path, pathDefined, converter, mode, htmlElement, dataContextObject, hasSideEffects, allowSideEffects);
+        };
+        BindingTools.ComputeBinding = function (source, destination, path, pathDefined, converter, mode, htmlElement, dataContextObject, hasSideEffects, allowSideEffects) {
             var value;
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
@@ -554,7 +586,7 @@ var SS;
                 htmlElement.onchange = function () {
                     if (!sourceIsArray) {
                         var evalString = "dataContextObject." + path + "=htmlElement.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);";
-                        (new Function(evalString))();
+                        eval(evalString);
                     }
                 };
             }
@@ -563,10 +595,9 @@ var SS;
                     htmlElement.innerHTML = value;
                 }
                 else {
-                    node.attributes[destination].value = value;
+                    htmlElement.attributes[destination].value = value;
                 }
             }
-            return value;
         };
         BindingTools.Bindings = new SS.BindingGlobalContext();
         return BindingTools;
