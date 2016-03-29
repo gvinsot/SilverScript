@@ -1,9 +1,4 @@
 ﻿<head>
-    <style type="text/css">
-        .auto-style1 {
-            height: 50px;
-        }
-    </style>
 </head>
 <div style="margin: 30px">
    <h1>  <img style="vertical-align:middle; float:left;height:50px"  src="../images/logo.png" /><span style="vertical-align:middle; margin-left:20px;height:50px;line-height:50px">
@@ -12,11 +7,11 @@
     </h1>
     <br />
     Add the references or download the sample project for TypeScript definitions.<br />
-    <a href="http://silverscript.azurewebsites.net/scripts/silverscript.js">http(s)://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
     <a href="http://silverscript.azurewebsites.net/scripts/libs/jquery.js">http(s)://silverscript.azurewebsites.net/scripts/libs/jquery.js  (jquery 2.1.3)</a><br />
+    <a href="http://silverscript.azurewebsites.net/scripts/silverscript.js">http(s)://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
     <br />
      
-    <div style="font-size:larger">
+    <div style="font-size:large">
         <table>
             <tr>
                 <td class="getstarteddivlabel">
@@ -26,15 +21,22 @@
                 </td>
                 <td>
                     <div class="getstarteddivcode">
-            <span ><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; 
+            &lt;div id=&quot;testDiv&quot; data-context=&quot;/api/mycontroller&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp; ...<br />
+                        &lt;/div&gt;
+                        <br />
             <br />
-            or</em><br/>
-            <em>&lt;div id=&quot;testDiv&quot; data-context=&quot;http://www.mywebsite.com/myobject.json&quot;&gt;...&lt;/div&gt;
+                        <em>or<br />
+                        </em><br/>
+            &lt;div id=&quot;testDiv&quot; data-context=&quot;http://www.mywebsite.com/myobject.json&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...<br />
+                        &lt;/div&gt;
             <br />
+                        <em>
+                        <br />
             or</em><br />
-            <em>$(&#39;testDiv&#39;)[&quot;data-context-value&quot;]=myObject;<br />
-            or</em><br />
-            <em>&lt;div id=&quot;testDiv&quot; data-context=&quot;{Binding Path=myProperty}&quot;&gt;...&lt;/div&gt; </em></span>             
+                        <br />
+            $(&#39;testDiv&#39;)[&quot;data-context-value&quot;]=myObject;<br />
     </div>
                 </td>                
             </tr>
@@ -44,14 +46,20 @@
                    Bind OneTime<br />
                   (default)
                 </td>
-                <td class="auto-style1">
+                <td>
          <div class="getstarteddivcode">
-            <span><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
-    &lt;/Button&gt;
+            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt; 
+             <br />
+             &lt;/span&gt;
             <br />
-            or<br />
-            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; My dynamic link &lt;/a&gt; 
-    </em></span>
+             <em>
+             <br />
+            or</em><br />
+             <br />
+            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; 
+             <br />
+             My dynamic link <br />
+             &lt;/a&gt;
         </div>
 
                 </td>
@@ -66,7 +74,12 @@
                      <div class="getstarteddivcode">
 
 
-                     </div>
+            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,Mode=OneWay}&quot;&gt; 
+                         <br />
+                         &lt;/span&gt;
+                         <br />
+                         <br />
+                         Important remark: a PropertyChanged property will automatically be added to the datacontext object and the binding will update in case the PropertyChanged event is raised on this object.</div>
                 </td>
             </tr>
             <tr>
@@ -78,21 +91,12 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="getstarteddivlabel">
-                    Mix syntaxes
-                </td>
-                <td>
-                    
-                     <div class="getstarteddivcode">
+            &lt;input type=&quot;text&quot; data-binding=&quot;{Binding Path=name,Destination=Content,Mode=TwoWay}&quot; &gt; 
+                         <br />
+                         &lt;/input&gt;
 
-                    &lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;<br />&nbsp;&nbsp;&nbsp; &lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/mycontroller/{DataBinding Path=id}&quot;&gt;&lt;/button&gt;<br />&lt;/div&gt;<br />
 
                      </div>
-
                 </td>
             </tr>
             <tr>
@@ -105,7 +109,17 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-                     </div>
+                         &lt;table style=&quot;width:100%&quot; data-source=&quot;/viewmodels/Test&quot; data-template=&quot;/views/item.html&quot;&gt; 
+                         <br />
+                         &lt;/table&gt;<br />
+                         <br />
+                         <span style="color:black"><em>And template (item.html):</em></span><br />
+                         <br />
+                         &lt;tr&gt;
+                         <br />
+                         &lt;td data-binding=&quot;{Binding Path=FirstName,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
+                         &lt;td data-binding=&quot;{Binding Path=LastName,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
+&nbsp;&lt;/tr&gt;</div>
 
                 </td>
             </tr>
@@ -116,11 +130,16 @@ TwoWay Binding
 
                 </td>
                 <td>
-                     <div class="getstarteddivcode">
-
-
-                     </div>
-
+                     <div class="getstarteddivcode">                         
+            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,Converter=MyMethod,ConverterParameter=myparameter}&quot;&gt;
+                         <br />
+                         &lt;/span&gt;
+                         <br />
+                        <br />
+                        <span style="color:black"> <em>=&gt; MyMethod will be called with parameters : MyMethod(valueToConvert,&#39;myparameter&#39;)</em></span>
+                             
+                             </div>
+                        
                 </td>
             </tr>
            <tr>
@@ -131,6 +150,9 @@ TwoWay Binding
                 </td>
                 <td>
                      <div class="getstarteddivcode">
+
+
+            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,ElementName=IdOfAnotherDiv}&quot;&gt; &lt;/span&gt;
 
 
                      </div>
@@ -148,7 +170,7 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-                     </div>
+            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=link,Destination=href}{Binding Path=label,Destination=Content}&quot;&gt; &lt;/a&gt;</div>
 
                 </td>
             </tr>
@@ -162,7 +184,8 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-                     </div>
+                         <em>You can create a json object and add it a PropertyChanged property of type EventHandler.<br />
+                         You can call yourobject.PropertyChanged.FireEvent(&quot;myPropertyName&quot;) to raise the PropertyChanged event and update all bindings referencing this property.</em></div>
 
                 </td>
             </tr>

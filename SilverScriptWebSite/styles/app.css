@@ -83,10 +83,10 @@ button:hover {
 
 .getstarteddivlabel
 {
-    height:inherit; vertical-align:middle; display:block;padding:20px;margin:20px
+    height:inherit; vertical-align:middle; display:inline-block;padding:20px;margin:20px
 }
 
 .getstarteddivcode
 {
-    height:inherit; vertical-align:middle; display:block;padding:20px;margin:20px; background-color:lightgray;border-radius:4px
+    height:inherit; vertical-align:middle; display:inline-block;padding:20px;margin:20px;color:darkslategray; background-color:lightgray;border-radius:4px
 }

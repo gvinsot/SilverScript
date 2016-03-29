@@ -575,7 +575,10 @@ var SS;
                 value = source;
             }
             if (converter != undefined) {
-                value = eval(converter + "(value)");
+                if (converterParameter != undefined)
+                    value = eval(converter + "(value,converterParameter)");
+                else
+                    value = eval(converter + "(value)");
             }
             if (mode == "OneWay") {
                 BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
