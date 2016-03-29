@@ -474,8 +474,9 @@ var SS;
             var parent = contextNode.parentNode;
             var nbElements = elements.length;
             if (isHttpLink == true) {
+                var transformed;
                 for (var bindingString in elements) {
-                    var transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
+                    transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
                     expression = expression.replace(bindingString, transformed);
                 }
                 if (!expectObjectResult) {
@@ -542,6 +543,7 @@ var SS;
                             source = document.getElementsByName(param[1]);
                             break;
                         case "Source":
+                            source = eval(param[1]);
                             break;
                         case "Destination":
                             destination = param[1];
@@ -564,9 +566,6 @@ var SS;
                     }
                 }
             }
-            BindingTools.ComputeBinding(source, destination, path, pathDefined, converter, mode, htmlElement, dataContextObject, hasSideEffects, allowSideEffects);
-        };
-        BindingTools.ComputeBinding = function (source, destination, path, pathDefined, converter, mode, htmlElement, dataContextObject, hasSideEffects, allowSideEffects) {
             var value;
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {

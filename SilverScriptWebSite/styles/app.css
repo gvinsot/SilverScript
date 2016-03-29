@@ -10,6 +10,8 @@ body
 {
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight:lighter;
+    margin:0px;
+   
 }
 
 /*------------------Normalize------------------------------*/
@@ -63,8 +65,6 @@ table {
 
 
 button {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0px;
   font-family: Arial;
   color: #ffffff;
@@ -79,4 +79,14 @@ button {
 button:hover {
   background: #DADADA;
   text-decoration: none;
+}
+
+.getstarteddivlabel
+{
+    height:inherit; vertical-align:middle; display:block;padding:20px;margin:20px
+}
+
+.getstarteddivcode
+{
+    height:inherit; vertical-align:middle; display:block;padding:20px;margin:20px; background-color:lightgray;border-radius:4px
 }

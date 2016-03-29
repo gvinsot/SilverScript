@@ -1,56 +1,173 @@
-﻿<div style="margin: 30px">
+﻿<head>
+    <style type="text/css">
+        .auto-style1 {
+            height: 50px;
+        }
+    </style>
+</head>
+<div style="margin: 30px">
    <h1>  <img style="vertical-align:middle; float:left;height:50px"  src="../images/logo.png" /><span style="vertical-align:middle; margin-left:20px;height:50px;line-height:50px">
            Get Started.
         </span>
     </h1>
-    <br /><br />
-    Reference the silverscript.js<br />
-    <a href="http://silverscript.azurewebsites.net/scripts/silverscript.js">http://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
-    <a href="https://silverscript.azurewebsites.net/scripts/silverscript.js">https://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
-    or download the sample project to get the TypeScript definitions.
     <br />
+    Add the references or download the sample project for TypeScript definitions.<br />
+    <a href="http://silverscript.azurewebsites.net/scripts/silverscript.js">http(s)://silverscript.azurewebsites.net/scripts/silverscript.js</a><br />
+    <a href="http://silverscript.azurewebsites.net/scripts/libs/jquery.js">http(s)://silverscript.azurewebsites.net/scripts/libs/jquery.js  (jquery 2.1.3)</a><br />
     <br />
-    <br />
-    Set the datacontext <br />
-    <span class="auto-style2"><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; </em></span> <br/>
-    or from javascript<br />
-    <em>$(&#39;testDiv&#39;).attributes[&quot;data-context-value&quot;]=myObject;</em><br />
-    or inside another datacontext<br />
-    <span class="auto-style2"><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;{Binding Path=myProperty}&quot;&gt;...&lt;/div&gt; </em></span> 
-    <br />
-    <br />
-    Add your binding to your content (OneTime binding by default)<br />
-    <span class="auto-style2"><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
+     
+    <div style="font-size:larger">
+        <table>
+            <tr>
+                <td class="getstarteddivlabel">
+
+        <span style="height:inherit;vertical-align:middle; display:inline-block;">Set the datacontext </span>
+
+                </td>
+                <td>
+                    <div class="getstarteddivcode">
+            <span ><em>&lt;div id=&quot;testDiv&quot; data-context=&quot;/api/mycontroller&quot;&gt;...&lt;/div&gt; 
+            <br />
+            or</em><br/>
+            <em>&lt;div id=&quot;testDiv&quot; data-context=&quot;http://www.mywebsite.com/myobject.json&quot;&gt;...&lt;/div&gt;
+            <br />
+            or</em><br />
+            <em>$(&#39;testDiv&#39;)[&quot;data-context-value&quot;]=myObject;<br />
+            or</em><br />
+            <em>&lt;div id=&quot;testDiv&quot; data-context=&quot;{Binding Path=myProperty}&quot;&gt;...&lt;/div&gt; </em></span>             
+    </div>
+                </td>                
+            </tr>
+
+            <tr>
+                <td class="getstarteddivlabel">
+                   Bind OneTime<br />
+                  (default)
+                </td>
+                <td class="auto-style1">
+         <div class="getstarteddivcode">
+            <span><em>&lt;Button data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt;
     &lt;/Button&gt;
-    </em></span><em>
-    <br/>
-    <br />
-    </em>Bind a different property<br/>
-    <span class="auto-style2"><em>&lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; My dynamic link &lt;/a&gt; </em></span>
-    <br />
-    <br />
-    Mix syntaxes<br />
-    <span class="auto-style2"><em>&lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;</em></span><em><br class="auto-style2"/>
-    </em><span class="auto-style2"><em>&nbsp;&nbsp;&nbsp; &lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/mycontroller/{DataBinding Path=id}&quot;&gt;&lt;/button&gt;</em></span><em><br class="auto-style2"/>
-    </em><span class="auto-style2"><em>&lt;/div&gt;</em></span><br />
+            <br />
+            or<br />
+            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; My dynamic link &lt;/a&gt; 
+    </em></span>
+        </div>
+
+                </td>
+            </tr>
+             <tr>
+                <td class="getstarteddivlabel">
+
+    OneWay Binding
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
 
 
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="getstarteddivlabel">
+TwoWay Binding
+                </td>
+                <td>
+                    
+                     <div class="getstarteddivcode">
 
-    <br />
+
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="getstarteddivlabel">
+                    Mix syntaxes
+                </td>
+                <td>
+                    
+                     <div class="getstarteddivcode">
+
+                    &lt;div data-context=&quot;/viewmodels/mycontroller&quot;&gt;<br />&nbsp;&nbsp;&nbsp; &lt;button data-binding=&quot;{Binding Path=name,Destination=Content}&quot; data-context=&quot;/mycontroller/{DataBinding Path=id}&quot;&gt;&lt;/button&gt;<br />&lt;/div&gt;<br />
+
+                     </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="getstarteddivlabel">
+
     Data templates for items lists<br />
-    <br />
-    Converters<br />
-    <br />
-    Bind to another UI element<br />
-    <br />
-    OneWay binding<br />
-    <br />
-    TwoWay binding<br />
-    <br />
-    Multiple bindings<br />
-    <br />
-    <br />
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
 
 
+                     </div>
 
+                </td>
+            </tr>
+            <tr>
+                <td class="getstarteddivlabel">
+
+                    Converters<br />
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
+
+
+                     </div>
+
+                </td>
+            </tr>
+           <tr>
+                <td class="getstarteddivlabel">
+
+                    Bind to another element<br />
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
+
+
+                     </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td class="getstarteddivlabel">
+
+                    Multiple bindings<br />
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
+
+
+                     </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="getstarteddivlabel">
+
+                    Code your own ViewModel
+
+                </td>
+                <td>
+                     <div class="getstarteddivcode">
+
+
+                     </div>
+
+                </td>
+            </tr>
+
+        </table>
+        </div>
+    
 </div>

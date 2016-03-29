@@ -210,9 +210,10 @@ module SS {
             var nbElements = elements.length;
 
             if (isHttpLink == true) {
+                var transformed: any;
                 for (var bindingString in elements)
                 {
-                    var transformed = BindingTools.EvaluateBindingExpression(bindingString,datacontext, parent);
+                    transformed = BindingTools.EvaluateBindingExpression(bindingString,datacontext, parent);
                     expression = expression.replace(bindingString, transformed);
                 }
                 
@@ -286,8 +287,7 @@ module SS {
                             source = document.getElementsByName(param[1]);
                             break;
                         case "Source":
-                            //TOFIX
-                            //source = BindingTools.EvaluateBinding(param[1], node);
+                            source = eval(param[1]);
                             break;
                         case "Destination":
                             destination = param[1];
@@ -316,10 +316,6 @@ module SS {
                     }
                 }
             }
-            BindingTools.ComputeBinding(source, destination, path, pathDefined, converter, mode, htmlElement, dataContextObject, hasSideEffects, allowSideEffects);
-        }
-
-        private static ComputeBinding(source: any,destination:string, path: any, pathDefined: boolean, converter: any, mode: string, htmlElement: HTMLElement, dataContextObject: any, hasSideEffects: boolean, allowSideEffects: boolean): void {
             var value;
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {

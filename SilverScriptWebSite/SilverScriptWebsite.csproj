@@ -34,22 +34,16 @@
     </Content>
     <Content Include="images\logo.png" />
     <Content Include="images\silverbullet.jpg" />
+    <Content Include="index.htm" />
     <Content Include="RestServices.txt" />
     <Content Include="scripts\libs\jquery.js" />
     <Content Include="scripts\silverscript.js" />
     <Content Include="styles\app.css" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.aspx" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="index.aspx.cs">
-      <DependentUpon>index.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="viewmodels\TestController.cs" />
   </ItemGroup>
