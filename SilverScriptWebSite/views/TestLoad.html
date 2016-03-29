@@ -3,13 +3,25 @@
 <h1>Test Page<br/></h1>
 <br/>
     <br />
-    Apply a template from a json source sending 1000 values.<br />
+    Apply a template from a json source sending 1000 values (250 lines).<br />
+    
+    <div class="getstarteddivcode">
+
+
+                         &lt;table style=&quot;width:100%&quot; data-source=&quot;/viewmodels/Test&quot; data-template=&quot;/views/item.html&quot;&gt; 
+                         <br />
+                         &lt;/table&gt;<br />
+                         <br />
+                         <span style="color:black"><em>And template (item.html):</em></span><br />
+                         <br />
+                         &lt;tr&gt;
+                         <br />
+                         &lt;td data-binding=&quot;{Binding Path=FirstName,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
+                         &lt;td data-binding=&quot;{Binding Path=LastName,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
+&nbsp;&lt;/tr&gt;</div>
+
     <br />
-    <span class="auto-style1"><em>&lt;div data-source=&quot;/viewmodels/Test&quot; data-template=&quot;/views/item.html&quot;&gt; &lt;/div&gt;
     <br />
-    <br />
-    </em></span>
-    <br class="auto-style1" />
     Result :<br />
     <br />
     <table style="width:100%" data-source="/viewmodels/Test" data-template="/views/item.html">

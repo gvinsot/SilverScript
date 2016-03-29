@@ -15,9 +15,14 @@
         <input type="text" data-binding="{Binding Path=FirstName,Mode=TwoWay,Destination=value}" style="width: 300px;height:30px;border:1px solid lightgray; outline:1px solid lightgray" value=""/>
         <br />
         <br />
-        If you change text, it will get automatically updated here :<br />
-        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">Binded text</div>        
+        If you change the text and unfocus the textblock, following binded text will automatically update :<br />
         <br />
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">Binded text</div>        
+        <br /> <br />
+        And this one too :
+        <br />
+        <br />
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">Binded text</div>        
         
     </div>
 </div>
