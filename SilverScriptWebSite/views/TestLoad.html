@@ -6,7 +6,19 @@
     Apply a template from a json source sending 1000 values (250 lines).<br />
     
     <div class="getstarteddivcode">
-
+                         Sample data model (C# model that is serialized to json through  .Net WebApi):<br/>
+    <br/>
+        public class TestClass<br />
+        {<br />
+        public string FirstName = "FirstName_" + Path.GetRandomFileName();<br />
+        public string LastName = "LastName_"+ Path.GetRandomFileName();<br />
+        public string Address = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(200)+"th " + Path.GetRandomFileName() + " street";<br />
+        public int Age = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(100);<br />
+        }<br />
+    <br/>
+        <br />
+    The view :<br />
+                        
 
                          &lt;table style=&quot;width:100%&quot; data-source=&quot;/viewmodels/Test&quot; data-template=&quot;/views/item.html&quot;&gt; 
                          <br />
@@ -18,6 +30,9 @@
                          <br />
                          &lt;td data-binding=&quot;{Binding Path=FirstName,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
                          &lt;td data-binding=&quot;{Binding Path=LastName,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
+                         &lt;td data-binding=&quot;{Binding Path=Address,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
+                         &lt;td data-binding=&quot;{Binding Path=Age,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
+
 &nbsp;&lt;/tr&gt;</div>
 
     <br />
