@@ -325,7 +325,7 @@ var SS;
         BindingTools.SetTemplate = function (targetNode, uri) {
             var node = document.getElementById(targetNode);
             BindingTools.Bindings.GarbageCollectBindings();
-            node.attributes["data-template"] = uri;
+            $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         };
         BindingTools.DisposeBindings = function (rootNode, skiprootNode) {
@@ -397,7 +397,7 @@ var SS;
         };
         BindingTools.EvaluateTemplatePart2 = function (templateString, args) {
             var node = args[0];
-            node["data-template-value"] = templateString;
+            $(node).attr("data-template-value", templateString);
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = node;
             if (dataSourceAttribute != undefined) {
@@ -597,7 +597,7 @@ var SS;
                     htmlElement.innerHTML = value;
                 }
                 else {
-                    htmlElement.attributes[destination].value = value;
+                    $(htmlElement).attr(destination, value);
                 }
             }
         };

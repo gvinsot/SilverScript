@@ -23,7 +23,7 @@ module SS {
 
            // BindingTools.DisposeBindings(node, true);
             BindingTools.Bindings.GarbageCollectBindings();
-            node.attributes["data-template"] = uri;
+            $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         }
 
@@ -107,7 +107,7 @@ module SS {
 
         private static EvaluateTemplatePart2(templateString: string, args: any[]):void {
             var node: Node = args[0];
-            node["data-template-value"] = templateString;
+            $(node).attr("data-template-value",templateString);
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = <HTMLElement>node;
                 
@@ -141,6 +141,7 @@ module SS {
             }
             else {
                 htmlnode.innerHTML = templateString;
+                // $(htmlnode).html(templateString);
                 BindingTools.SetBindingsRecursively(htmlnode, true);
             }
             
@@ -350,7 +351,7 @@ module SS {
                     htmlElement.innerHTML = value;
                 }
                 else {
-                    htmlElement.attributes[destination].value = value;
+                    $(htmlElement).attr(destination, value);
                 }
             }
         }
