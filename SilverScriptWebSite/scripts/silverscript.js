@@ -528,6 +528,7 @@ var SS;
             var hasSideEffects = false;
             var pathDefined = false;
             var param = [];
+            var value;
             for (var i = 0; i < parameters.length; i++) {
                 param = parameters[i].split('=');
                 if (param.length == 1) {
@@ -561,12 +562,14 @@ var SS;
                         case "Mode":
                             mode = param[1];
                             break;
+                        case "Value":
+                            value = param[1];
+                            break;
                         default:
                             break;
                     }
                 }
             }
-            var value;
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
                 value = eval((sourceIsArray ? 'source' : 'source.') + path);
@@ -592,6 +595,9 @@ var SS;
                     }
                 };
             }
+            else if (mode == "Eval") {
+                value = eval(value);
+            }
             if (hasSideEffects && allowSideEffects) {
                 if (destination == "Content") {
                     htmlElement.innerHTML = value;
@@ -600,6 +606,7 @@ var SS;
                     $(htmlElement).attr(destination, value);
                 }
             }
+            return value;
         };
         BindingTools.Bindings = new SS.BindingGlobalContext();
         return BindingTools;

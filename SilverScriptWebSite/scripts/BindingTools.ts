@@ -272,6 +272,8 @@ module SS {
             var hasSideEffects = false;
             var pathDefined = false;
             var param = [];
+            var value;
+
             for (var i = 0; i < parameters.length; i++) {
                 param = parameters[i].split('=');
 
@@ -310,6 +312,10 @@ module SS {
                         case "Mode":
                             mode = param[1];
                             break;
+                        case "Value":
+                            value = param[1];
+                            break;
+            
                         //case "TargetNullValue":
                         //    break;
                         default:
@@ -317,7 +323,6 @@ module SS {
                     }
                 }
             }
-            var value;
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
                 value = eval((sourceIsArray ? 'source' : 'source.') + path);
@@ -343,8 +348,11 @@ module SS {
                         eval(evalString);
                     }
                 };
-
+            } else if (mode == "Eval") {
+                value = eval(value);
             }
+
+
             if (hasSideEffects && allowSideEffects) {
                 if (destination == "Content") {
                     //$(htmlElement).html(value);
@@ -354,6 +362,7 @@ module SS {
                     $(htmlElement).attr(destination, value);
                 }
             }
+            return value;
         }
     }
 }
