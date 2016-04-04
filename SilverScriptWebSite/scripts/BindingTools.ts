@@ -12,12 +12,17 @@ module SS {
     export function Navigate(contextNode:string, uriExpression: string) {
         BindingTools.Navigate(contextNode,uriExpression);
     }
+
     export function GetDataContext(contextNodeName: string):any {
         var node = document.getElementById(contextNodeName);
         var contextNode = SS.BindingTools.GetParentContext(node);
         return contextNode["data-context-value"];
     }
-    
+
+    export function PushDataContext(contextNodeName: string, uriExpression: string, context:any, callback: delegate) {
+        var datacontext = GetDataContext(contextNodeName);
+        FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
+    }
 
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();

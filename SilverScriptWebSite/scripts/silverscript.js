@@ -324,6 +324,11 @@ var SS;
         return contextNode["data-context-value"];
     }
     SS.GetDataContext = GetDataContext;
+    function PushDataContext(contextNodeName, uriExpression, context, callback) {
+        var datacontext = GetDataContext(contextNodeName);
+        SS.FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
+    }
+    SS.PushDataContext = PushDataContext;
     var BindingTools = (function () {
         function BindingTools() {
         }
