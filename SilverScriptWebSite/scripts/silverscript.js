@@ -446,7 +446,7 @@ var SS;
                 var startTime = (new Date()).getTime();
                 BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, function (ctxt, items) {
                     node["data-source-value"] = items;
-                    if (items.length == undefined) {
+                    if (items == null || items.length == undefined) {
                         console.log("Bad data-source type:" + items);
                         return;
                     }
