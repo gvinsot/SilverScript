@@ -166,7 +166,8 @@ var SS;
                 }
             });
         };
-        FileTools.PostJsonFile = function (path, postdata, callbackctxt, callback) {
+        FileTools.PostJsonFile = function (path, postdata, callbackctxt, callback, errorCallback) {
+            if (errorCallback === void 0) { errorCallback = null; }
             var queryResult;
             jQuery.ajax({
                 type: "POST",
@@ -460,7 +461,9 @@ var SS;
                         subnode["data-context-value"] = items[i];
                         BindingTools.SetBindingsRecursively(subnode);
                     }
-                    $(htmlnode).append(result);
+                    var jhtmlnode = $(htmlnode);
+                    jhtmlnode.empty();
+                    jhtmlnode.append(result);
                     var nbMilliseconds = (new Date()).getTime() - startTime;
                     console.log("Apply templates: " + nbMilliseconds + "ms");
                 });

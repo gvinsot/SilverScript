@@ -58,7 +58,7 @@ module SS {
             
         }
 
-        public static PostJsonFile(path: string, postdata: any, callbackctxt:any, callback: delegate): void {
+        public static PostJsonFile(path: string, postdata: any, callbackctxt: any, callback: delegate, errorCallback: delegate = null): void {
             var queryResult: any;
 
             jQuery.ajax(

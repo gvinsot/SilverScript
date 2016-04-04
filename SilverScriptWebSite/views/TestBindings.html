@@ -7,7 +7,7 @@
         &lt;div data-context=&quot;/viewmodels/Test/1&quot;&gt;        <br />
                 &lt;input type=&quot;text&quot; data-binding=&quot;{Binding Path=FirstName,Mode=TwoWay,Destination=value}&quot; value=&quot;&quot;/&gt;<br />
                 <br />              
-        &lt;div data-binding=&quot;{Binding Path=FirstName,Destination=Content,Mode=OneWay}&quot;&gt;Binded text&lt;/div&gt;<br />       
+        &lt;div data-binding=&quot;{Binding Path=FirstName,Destination=Content,Mode=OneWay}&quot;&gt;---------&lt;/div&gt;<br />       
         <br />    &lt;/div&gt;
     </div>
 
@@ -21,12 +21,12 @@
         <br />
         If you change the text and unfocus the textblock, following binded text will automatically update :<br />
         <br />
-        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">Binded text</div>        
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">---------</div>        
         <br /> <br />
         And this one too :
         <br />
         <br />
-        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">Binded text</div>        
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}">---------</div>        
         
     </div>
 </div>

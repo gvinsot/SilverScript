@@ -20,7 +20,7 @@ module SS {
         return contextNode["data-context-value"];
     }
 
-    export function PushDataContext(contextNodeName: string, uriExpression: string, context:any, callback: delegate) {
+    export function PushDataContext(contextNodeName: string, uriExpression: string, context: any, callback: delegate) {
         var datacontext = GetDataContext(contextNodeName);
         FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
     }
@@ -182,8 +182,9 @@ module SS {
                         subnode["data-context-value"] = items[i];
                         BindingTools.SetBindingsRecursively(subnode);
                     }
-
-                    $(htmlnode).append(result);
+                    var jhtmlnode = $(htmlnode);
+                    jhtmlnode.empty();
+                    jhtmlnode.append(result);
 
                     var nbMilliseconds = (new Date()).getTime() - startTime;
                     console.log("Apply templates: " + nbMilliseconds + "ms");
