@@ -12,6 +12,12 @@ module SS {
     export function Navigate(contextNode:string, uriExpression: string) {
         BindingTools.Navigate(contextNode,uriExpression);
     }
+    export function GetDataContext(contextNodeName: string):any {
+        var node = document.getElementById(contextNodeName);
+        var contextNode = SS.BindingTools.GetParentContext(node);
+        return contextNode["data-context-value"];
+    }
+    
 
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
@@ -96,7 +102,7 @@ module SS {
             }
         }
 
-        private static GetParentContext(node: Node): Node {
+        public static GetParentContext(node: Node): Node {
             var parentNode = node;
             while (parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode["data-context-value"] == undefined) {
                 parentNode = parentNode.parentNode;

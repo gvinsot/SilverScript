@@ -318,6 +318,12 @@ var SS;
         BindingTools.Navigate(contextNode, uriExpression);
     }
     SS.Navigate = Navigate;
+    function GetDataContext(contextNodeName) {
+        var node = document.getElementById(contextNodeName);
+        var contextNode = SS.BindingTools.GetParentContext(node);
+        return contextNode["data-context-value"];
+    }
+    SS.GetDataContext = GetDataContext;
     var BindingTools = (function () {
         function BindingTools() {
         }
