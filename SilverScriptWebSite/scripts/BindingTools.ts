@@ -30,6 +30,15 @@ module SS {
         SS.BindingTools.SetBindingsRecursively(node);
     }
 
+    export function PropagateDataContext(sourceNode: HTMLElement, destinationNodeId:string) {
+        BindingTools.EvaluateDataContext(sourceNode, (ctxt, dataContextObject) => {
+            var destinationNode = document.getElementById(destinationNodeId);
+            destinationNode["data-context-value"] = dataContextObject;
+            if (destinationNode["PropertyChanged"] != undefined) {
+                (<EventHandler>destinationNode["PropertyChanged"]).FireEvent("data-context-value");
+            }
+            });
+    }
 
 
     export class BindingTools {
@@ -187,7 +196,7 @@ module SS {
             
         }
         
-        private static EvaluateDataContext(node, callback:delegate): void {
+        public static EvaluateDataContext(node, callback:delegate): void {
             var contextNode = BindingTools.GetParentContext(node);
 
             if (contextNode == undefined) {

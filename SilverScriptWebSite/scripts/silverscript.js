@@ -334,6 +334,16 @@ var SS;
         SS.BindingTools.SetBindingsRecursively(node);
     }
     SS.ApplyBindings = ApplyBindings;
+    function PropagateDataContext(sourceNode, destinationNodeId) {
+        BindingTools.EvaluateDataContext(sourceNode, function (ctxt, dataContextObject) {
+            var destinationNode = document.getElementById(destinationNodeId);
+            destinationNode["data-context-value"] = dataContextObject;
+            if (destinationNode["PropertyChanged"] != undefined) {
+                destinationNode["PropertyChanged"].FireEvent("data-context-value");
+            }
+        });
+    }
+    SS.PropagateDataContext = PropagateDataContext;
     var BindingTools = (function () {
         function BindingTools() {
         }
