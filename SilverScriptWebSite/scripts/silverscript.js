@@ -314,6 +314,10 @@ var SS;
         SS.BindingTools.SetTemplate(targetNode, uri);
     }
     SS.SetTemplate = SetTemplate;
+    function Navigate(contextNode, uriExpression) {
+        BindingTools.Navigate(contextNode, uriExpression);
+    }
+    SS.Navigate = Navigate;
     var BindingTools = (function () {
         function BindingTools() {
         }
@@ -327,6 +331,15 @@ var SS;
             BindingTools.Bindings.GarbageCollectBindings();
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
+        };
+        BindingTools.Navigate = function (contextNode, uriExpression) {
+            var node = document.getElementById(contextNode);
+            BindingTools.Bindings.GarbageCollectBindings();
+            BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
+                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, function (ctxt2, result) {
+                    window.location.href = result;
+                }, false);
+            });
         };
         BindingTools.DisposeBindings = function (rootNode, skiprootNode) {
             if (skiprootNode === void 0) { skiprootNode = false; }

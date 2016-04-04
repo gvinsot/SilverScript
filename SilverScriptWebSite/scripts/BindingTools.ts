@@ -9,6 +9,10 @@ module SS {
         SS.BindingTools.SetTemplate(targetNode,uri);
     }
 
+    export function Navigate(contextNode:string, uriExpression: string) {
+        BindingTools.Navigate(contextNode,uriExpression);
+    }
+
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
 
@@ -26,6 +30,19 @@ module SS {
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         }
+        
+        public static Navigate(contextNode: string, uriExpression: string) {
+            var node = document.getElementById(contextNode);
+            // BindingTools.DisposeBindings(node, true);
+            BindingTools.Bindings.GarbageCollectBindings();
+
+            BindingTools.EvaluateDataContext(node, (ctxt, dataContextObject) => {
+                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, (ctxt2, result) => {
+                    window.location.href = result;
+                }, false);
+            });   
+        }
+
 
         public static DisposeBindings(rootNode: HTMLElement, skiprootNode: boolean = false): void {
             BindingTools.DisposeBindingsRecursively(rootNode, skiprootNode);
