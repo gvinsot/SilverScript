@@ -5,6 +5,7 @@
 ///<reference path="FileTools.ts" />
 
 module SS {
+
     export function SetTemplate(targetNode: string, uri: string) {
         SS.BindingTools.SetTemplate(targetNode,uri);
     }
