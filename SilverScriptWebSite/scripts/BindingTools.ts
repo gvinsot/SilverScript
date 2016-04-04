@@ -87,7 +87,7 @@ module SS {
             if (rootNode == null)
                 return;
 
-            if (!skipCurrentNode) {
+            if (!skipCurrentNode && rootNode.attributes != undefined) {
                  var databinding = rootNode.attributes["data-binding"];
                  if (databinding != undefined) {
                      SS.BindingTools.EvaluateBinding(databinding.value, rootNode,

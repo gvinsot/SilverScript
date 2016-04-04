@@ -381,7 +381,7 @@ var SS;
             if (skipCurrentNode === void 0) { skipCurrentNode = false; }
             if (rootNode == null)
                 return;
-            if (!skipCurrentNode) {
+            if (!skipCurrentNode && rootNode.attributes != undefined) {
                 var databinding = rootNode.attributes["data-binding"];
                 if (databinding != undefined) {
                     SS.BindingTools.EvaluateBinding(databinding.value, rootNode, function (ctxt, args) {
