@@ -153,6 +153,10 @@ module SS {
                 var startTime = (new Date()).getTime();            
                 BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, (ctxt, items) => {
                     node["data-source-value"] = items;
+                    if (items.length == undefined) {
+                        console.log("Bad data-source type:" + items);
+                        return;
+                    }
                     var itemsLength = items.length;
                     var resultString = "";
                 
