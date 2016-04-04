@@ -142,7 +142,7 @@ module SS {
 
         private static EvaluateTemplatePart2(templateString: string, args: any[]):void {
             var node: Node = args[0];
-            $(node).attr("data-template-value",templateString);
+            node["data-template-value"]=templateString;
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = <HTMLElement>node;
                 

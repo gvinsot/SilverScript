@@ -426,7 +426,7 @@ var SS;
         };
         BindingTools.EvaluateTemplatePart2 = function (templateString, args) {
             var node = args[0];
-            $(node).attr("data-template-value", templateString);
+            node["data-template-value"] = templateString;
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = node;
             if (dataSourceAttribute != undefined) {
