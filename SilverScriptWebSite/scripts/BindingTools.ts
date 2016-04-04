@@ -326,8 +326,11 @@ module SS {
                             path = param[1];
                             pathDefined = true;
                             break;
-                        case "ElementName":
-                            source = document.getElementsByName(param[1]);
+                        //case "ElementName":
+                        //    source = document.getElementsByName(param[1]);
+                        //    break;
+                        case "ElementId":
+                            source = document.getElementById(param[1]);
                             break;
                         case "Source":
                             source = eval(param[1]);
