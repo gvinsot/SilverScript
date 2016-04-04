@@ -34,6 +34,7 @@ module SS {
         BindingTools.EvaluateDataContext(sourceNode, (ctxt, dataContextObject) => {
             var destinationNode = document.getElementById(destinationNodeId);
             destinationNode["data-context-value"] = dataContextObject;
+            ApplyBindings(destinationNodeId);
             if (destinationNode["PropertyChanged"] != undefined) {
                 (<EventHandler>destinationNode["PropertyChanged"]).FireEvent("data-context-value");
             }
