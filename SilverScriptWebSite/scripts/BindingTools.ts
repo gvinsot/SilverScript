@@ -24,6 +24,13 @@ module SS {
         FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
     }
 
+    export function ApplyBindings(nodeName: string) {
+        var node = document.getElementById(nodeName);
+        SS.BindingTools.SetBindingsRecursively(node);
+    }
+
+
+
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
 

@@ -329,6 +329,11 @@ var SS;
         SS.FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
     }
     SS.PushDataContext = PushDataContext;
+    function ApplyBindings(nodeName) {
+        var node = document.getElementById(nodeName);
+        SS.BindingTools.SetBindingsRecursively(node);
+    }
+    SS.ApplyBindings = ApplyBindings;
     var BindingTools = (function () {
         function BindingTools() {
         }
