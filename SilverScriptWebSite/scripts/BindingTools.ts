@@ -450,10 +450,15 @@ module SS {
             }
             //apply converter and stringformat
             if (converter != undefined) {
-                if (converterParameter != undefined)
-                    value = eval(converter + "(value,converterParameter)");
-                else
-                    value = eval(converter + "(value)");
+                try {
+                    if (converterParameter != undefined)
+                        value = eval(converter + "(value,converterParameter)");
+                    else
+                        value = eval(converter + "(value)");
+                }
+                catch (ex) {
+                    console.log("Error on converter " + converter);                    
+                }
             }
 
             if (mode == "OneWay" && dataContextObject!=null) {
@@ -463,12 +468,24 @@ module SS {
                 htmlElement.onchange = () => {
                     if (!sourceIsArray) {
                         var evalString = "dataContextObject." + path + "=htmlElement.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);";
-                        eval(evalString);
+                        try {
+                            eval(evalString);
+                        }
+                        catch (ex)
+                        {
+                            console.log("Exception applying binding : " + evalString);
+                        }
                     }
                 };
             }
             else if (mode == "Eval") {
-                value = eval(value);
+                try {
+                    value = eval(value);
+                }
+                catch (ex) {
+                    console.log("Could not evaluate " + value);
+                    value = null;
+                }
             }
 
             if (hasSideEffects && allowSideEffects) {
