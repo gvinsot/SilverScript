@@ -341,9 +341,16 @@ var SS;
             SS.BindingTools.SetDataContext(destinationNode, dataContextObject);
             var context = SS.BindingTools.GetParentContext(SS.BindingTools.GetItemsSourceContext(sourceNode));
             var onDataContextChanged = context["DataContextChanged"];
-            onDataContextChanged.Attach(function (ctx, args) {
-                SS.BindingTools.SetDataContext(ctx, "{x:Null}");
-            }, destinationNode);
+            if (onDataContextChanged == undefined) {
+                onDataContextChanged = new SS.EventHandler();
+                context["DataContextChanged"] = onDataContextChanged;
+            }
+            if (context["IsPropagationAttached"] == undefined) {
+                onDataContextChanged.Attach(function (ctx, args) {
+                    SS.BindingTools.SetDataContext(ctx, "{x:Null}");
+                }, destinationNode);
+                context["IsPropagationAttached"] = true;
+            }
         });
     }
     SS.PropagateDataContext = PropagateDataContext;
