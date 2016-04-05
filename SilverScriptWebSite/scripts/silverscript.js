@@ -483,6 +483,8 @@ var SS;
                 BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, function (ctxt, items) {
                     node["data-source-value"] = items;
                     if (items == null || items.length == undefined) {
+                        var jhtmlnode = $(htmlnode);
+                        jhtmlnode.empty();
                         console.log("Bad data-source type:" + items);
                         return;
                     }
