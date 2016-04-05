@@ -190,6 +190,10 @@ module SS {
 
         private static EvaluateTemplatePart2(templateString: string, args: any[]): void {
             var node: Node = args[0];
+            templateString = templateString.TrimStart("\r\n");
+            templateString = templateString.TrimStart(" ");
+            templateString = templateString.TrimEnd(" ");
+            templateString = templateString.TrimEnd("\r\n");
             node["data-template-value"] = templateString;
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = <HTMLElement>node;

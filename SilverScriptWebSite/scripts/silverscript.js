@@ -470,6 +470,10 @@ var SS;
         };
         BindingTools.EvaluateTemplatePart2 = function (templateString, args) {
             var node = args[0];
+            templateString = templateString.TrimStart("\r\n");
+            templateString = templateString.TrimStart(" ");
+            templateString = templateString.TrimEnd(" ");
+            templateString = templateString.TrimEnd("\r\n");
             node["data-template-value"] = templateString;
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = node;
