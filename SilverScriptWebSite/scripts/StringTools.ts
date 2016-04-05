@@ -114,7 +114,7 @@ module SS {
                 } else if (/null/.test(match)) {
                     cls = 'null';
                 }
-                return '<span class="' + cls + '">' + match + '</span>';
+                return '<span class="' + cls + '">' + match + '</span><br/>';
             });
         }
     }
