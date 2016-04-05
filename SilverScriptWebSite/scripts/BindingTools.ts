@@ -381,7 +381,7 @@ module SS {
             var hasSideEffects = false;
             var pathDefined = false;
             var param = [];
-            var value;
+            var value=null;
 
             for (var i = 0; i < parameters.length; i++) {
                 param = parameters[i].split('=');
@@ -445,7 +445,7 @@ module SS {
                     return null;
                 }
             }
-            else {
+            else if(value==null) {
                 value = source;
             }
             //apply converter and stringformat
