@@ -24,10 +24,12 @@ namespace SilverScript.viewmodels
 
         public class TestClass
         {
+            public static Random rand = new Random();
             public string FirstName = "FirstName_" + Path.GetRandomFileName();
-            public string LastName = "LastName_"+ Path.GetRandomFileName();
-            public string Address = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(200)+"th " + Path.GetRandomFileName() + " street";
-            public int Age = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(100);
+            public string LastName = "LastName_" + Path.GetRandomFileName();
+            public string Address = rand.Next(200) + "th " + Path.GetRandomFileName() + " street";
+            public int Age = rand.Next(80) + 20;
+            public List<TestClass> Children = new List<TestClass>();
         }
         // GET: api/Test/5
         public TestClass Get(int id)
