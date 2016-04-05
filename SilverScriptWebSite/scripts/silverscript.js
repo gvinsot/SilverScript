@@ -596,9 +596,10 @@ var SS;
             var nbElements = elements.length;
             if (isHttpLink == true) {
                 var transformed;
-                for (var bindingString in elements) {
-                    transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
-                    expression = expression.replace(bindingString, transformed);
+                for (var elementKey in elements) {
+                    var element = elements[elementKey];
+                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent);
+                    expression = expression.replace(element, transformed);
                 }
                 if (!expectObjectResult) {
                     callback(contextNode, expression);

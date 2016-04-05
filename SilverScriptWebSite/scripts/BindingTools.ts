@@ -324,9 +324,10 @@ module SS {
 
             if (isHttpLink == true) {
                 var transformed: any;
-                for (var bindingString in elements) {
-                    transformed = BindingTools.EvaluateBindingExpression(bindingString, datacontext, parent);
-                    expression = expression.replace(bindingString, transformed);
+                for (var elementKey in elements) {
+                    var element = elements[elementKey];
+                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent);
+                    expression = expression.replace(element, transformed);
                 }
 
                 if (!expectObjectResult) {
