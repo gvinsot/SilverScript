@@ -54,6 +54,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="viewmodels\Test2Controller.cs" />
     <Compile Include="viewmodels\TestController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +127,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="views\childOneWay.html" />
+    <Content Include="views\itemOneWay.html" />
+    <Content Include="views\TestBindings2.html" />
     <Content Include="views\WhatIsIt.html" />
     <Content Include="views\GetStarted.html" />
     <Content Include="views\item.html" />

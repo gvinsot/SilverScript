@@ -338,14 +338,19 @@ var SS;
     function PropagateDataContext(sourceNode, destinationNodeId) {
         BindingTools.EvaluateDataContext(sourceNode, function (ctxt, dataContextObject) {
             var destinationNode = document.getElementById(destinationNodeId);
-            destinationNode["data-context-value"] = dataContextObject;
-            ApplyBindings(destinationNodeId);
-            if (destinationNode["PropertyChanged"] != undefined) {
-                destinationNode["PropertyChanged"].FireEvent("data-context-value");
-            }
+            SS.BindingTools.SetDataContext(destinationNode, dataContextObject);
+            var context = SS.BindingTools.GetParentContext(SS.BindingTools.GetItemsSourceContext(sourceNode));
+            var onDataContextChanged = context["DataContextChanged"];
+            onDataContextChanged.Attach(function (ctx, args) {
+                SS.BindingTools.SetDataContext(ctx, "{x:Null}");
+            }, destinationNode);
         });
     }
     SS.PropagateDataContext = PropagateDataContext;
+    function SetDataContext(element, value) {
+        SS.BindingTools.SetDataContext(element, value);
+    }
+    SS.SetDataContext = SetDataContext;
     var BindingTools = (function () {
         function BindingTools() {
         }
@@ -389,6 +394,17 @@ var SS;
                 }
             }
         };
+        BindingTools.SetDataContext = function (node, value) {
+            node["data-context-value"] = value;
+            BindingTools.SetBindingsRecursively(node);
+            var eventHandler = node["DataContextChanged"];
+            if (eventHandler != undefined) {
+                eventHandler.FireEvent(value);
+            }
+            else {
+                node["DataContextChanged"] = new SS.EventHandler();
+            }
+        };
         BindingTools.SetBindingsRecursively = function (rootNode, skipCurrentNode) {
             if (skipCurrentNode === void 0) { skipCurrentNode = false; }
             if (rootNode == null)
@@ -418,10 +434,19 @@ var SS;
         };
         BindingTools.GetParentContext = function (node) {
             var parentNode = node;
-            while (parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode["data-context-value"] == undefined) {
+            while (parentNode != null && parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode["data-context-value"] == undefined) {
                 parentNode = parentNode.parentNode;
             }
-            if (parentNode.attributes == null)
+            if (parentNode == null || parentNode.attributes == null)
+                return null;
+            return parentNode;
+        };
+        BindingTools.GetItemsSourceContext = function (node) {
+            var parentNode = node;
+            while (parentNode != null && parentNode.attributes != null && parentNode.attributes["data-source"] == undefined && parentNode["data-source-value"] == undefined) {
+                parentNode = parentNode.parentNode;
+            }
+            if (parentNode == null || parentNode.attributes == null)
                 return null;
             return parentNode;
         };
@@ -458,8 +483,14 @@ var SS;
                     var result = $(resultString);
                     for (var i = 0; i < itemsLength; i++) {
                         var subnode = result[i];
-                        subnode["data-context-value"] = items[i];
-                        BindingTools.SetBindingsRecursively(subnode);
+                        BindingTools.SetDataContext(subnode, items[i]);
+                    }
+                    for (var i = 0; i < htmlnode.children.length; i++) {
+                        var subhnode = htmlnode.children[i];
+                        subhnode["data-context-value"] = null;
+                        var dataContextChangedEvent = subhnode["DataContextChanged"];
+                        if (dataContextChangedEvent != undefined)
+                            dataContextChangedEvent.FireEvent(null);
                     }
                     var jhtmlnode = $(htmlnode);
                     jhtmlnode.empty();
@@ -480,7 +511,9 @@ var SS;
                 return;
             }
             var datacontextvalue = contextNode["data-context-value"];
-            if (datacontextvalue != undefined) {
+            if (datacontextvalue != undefined && datacontextvalue != null) {
+                if (datacontextvalue == "{x:Null}")
+                    datacontextvalue = null;
                 callback(node, datacontextvalue);
                 return;
             }
@@ -493,7 +526,7 @@ var SS;
             var contextExpression = contextNode.attributes["data-context"].value;
             BindingTools.EvaluateDataContext(contextNode.parentNode, function (ctxt, datacontext) {
                 BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, function (ctxt, datacontextvalue) {
-                    ctxt["data-context-value"] = datacontextvalue;
+                    BindingTools.SetDataContext(ctxt, datacontextvalue);
                     var contextloading = ctxt["data-context-value-loading"];
                     contextloading.FireEvent(datacontextvalue);
                     contextloading.Dispose();
@@ -509,6 +542,10 @@ var SS;
         };
         BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, callback, expectObjectResult) {
             if (expectObjectResult === void 0) { expectObjectResult = true; }
+            if (expression == null || expression == "{x:Null}") {
+                callback(contextNode, null);
+                return;
+            }
             var isHttpLink = expression.StartWith("/") || expression.StartWith("http://") || expression.StartWith("https://");
             var elements = [];
             var matches;
@@ -619,7 +656,13 @@ var SS;
             }
             var sourceIsArray = Object.prototype.toString.call(source) === '[object Array]';
             if (source != undefined && pathDefined) {
-                value = eval((sourceIsArray ? 'source' : 'source.') + path);
+                try {
+                    value = eval((sourceIsArray ? 'source' : 'source.') + path);
+                }
+                catch (ex) {
+                    console.log("Binding Error on expression : " + path + " on data context " + dataContextObject);
+                    return null;
+                }
             }
             else {
                 value = source;
@@ -630,10 +673,10 @@ var SS;
                 else
                     value = eval(converter + "(value)");
             }
-            if (mode == "OneWay") {
+            if (mode == "OneWay" && dataContextObject != null) {
                 BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
             }
-            else if (mode == "TwoWay") {
+            else if (mode == "TwoWay" && dataContextObject != null) {
                 var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
                 htmlElement.onchange = function () {
                     if (!sourceIsArray) {
@@ -647,7 +690,7 @@ var SS;
             }
             if (hasSideEffects && allowSideEffects) {
                 if (destination == "Content") {
-                    htmlElement.innerHTML = value;
+                    htmlElement.innerHTML = value == null ? "" : value;
                 }
                 else {
                     $(htmlElement).attr(destination, value);

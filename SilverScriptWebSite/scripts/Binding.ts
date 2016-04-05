@@ -41,7 +41,11 @@ module SS {
             this.SetBindedObject(bindedObject);
         }
 
+
+
         public Dispose(): void {
+            //SS.BindingTools.EvaluateBinding( null, this.Node, (a, b) => { });
+
             if (this._bindedObject.PropertyChanged != undefined) {
                 (<EventHandler>this._bindedObject.PropertyChanged).Dettach(this.UpdateNodeOnContextChange);
             }

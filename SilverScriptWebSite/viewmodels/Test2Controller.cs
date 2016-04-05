@@ -8,15 +8,28 @@ using System.Web.Http;
 
 namespace SilverScript.viewmodels
 {
-    public class TestController : ApiController
+    public class Test2Controller : ApiController
     {
         // GET: api/Test
         public IEnumerable<TestClass> Get()
         {
             List<TestClass> result = new List<TestClass>();
-            for(int i=0;i<250;i++)
+            for(int i=0;i<10;i++)
             {
-                result.Add(new TestClass());
+                var person = new TestClass()
+                {
+                    FirstName = "Monsieur",
+                    LastName = "Nom" + i,
+                };
+                int nbChildren = (new Random()).Next(7)+1;
+                for(int j=0;j< nbChildren;j++)
+                {
+                    person.Children.Add(new TestClass()
+                    {
+                        LastName = "Nom"+i
+                    });
+                }
+                result.Add(person);
             }
 
             return result;
@@ -28,6 +41,7 @@ namespace SilverScript.viewmodels
             public string LastName = "LastName_"+ Path.GetRandomFileName();
             public string Address = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(200)+"th " + Path.GetRandomFileName() + " street";
             public int Age = (new Random(DateTime.Now.TimeOfDay.Milliseconds)).Next(100);
+            public List<TestClass> Children = new List<TestClass>();                
         }
         // GET: api/Test/5
         public TestClass Get(int id)

@@ -23,6 +23,7 @@ module SS {
             var binding = new Binding(path, node, bindedObject);
 
             this.BindingDictionary[bindingId] = binding;
+
             return binding;
         }
 
