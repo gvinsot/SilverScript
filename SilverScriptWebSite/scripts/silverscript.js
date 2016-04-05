@@ -559,7 +559,7 @@ var SS;
                 callback(contextNode, null);
                 return;
             }
-            var isHttpLink = expression.StartWith("/") || expression.StartWith("http://") || expression.StartWith("https://");
+            var isHttpLink = !expression.StartWith("{") && (expression.StartWith("/") || expression.StartWith("http://") || expression.StartWith("https://") || expression.indexOf("/") > 0);
             var elements = [];
             var matches;
             var regex = /({Binding[^}]*})/g;
