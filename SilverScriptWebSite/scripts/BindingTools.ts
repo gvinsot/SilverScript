@@ -214,7 +214,7 @@ module SS {
 
             var datacontextloading = contextNode["data-context-value-loading"] as EventHandler;
             if (datacontextloading != null) {
-                datacontextloading.Attach(callback, node);
+                datacontextloading.Attach(callback, node);                
                 return;
             }
 
@@ -231,6 +231,8 @@ module SS {
                     contextloading.FireEvent(datacontextvalue);
                     contextloading.Dispose();
                     delete ctxt["data-context-value-loading"];
+
+                    
                     callback(node, datacontextvalue);
                 });
 
