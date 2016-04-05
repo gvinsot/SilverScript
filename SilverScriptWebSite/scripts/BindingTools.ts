@@ -466,7 +466,8 @@ module SS {
                         eval(evalString);
                     }
                 };
-            } else if (mode == "Eval") {
+            }
+            else if (mode == "Eval") {
                 value = eval(value);
             }
 
