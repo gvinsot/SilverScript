@@ -37,10 +37,16 @@
     <Content Include="images\silverbullet.jpg" />
     <Content Include="index.htm" />
     <Content Include="RestServices.txt" />
-    <Content Include="scripts\ai.0.15.0-build58334.js" />
-    <Content Include="scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="scripts\ai.0.15.0-build58334.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="scripts\ai.0.15.0-build58334.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="scripts\libs\jquery.js" />
-    <Content Include="scripts\silverscript.js" />
+    <Content Include="scripts\silverscript.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="styles\app.css" />
   </ItemGroup>
   <ItemGroup>
@@ -132,17 +138,39 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="scripts\Binding.ts" />
-    <TypeScriptCompile Include="scripts\BindingGlobalContext.ts" />
-    <TypeScriptCompile Include="scripts\BindingTools.ts" />
-    <TypeScriptCompile Include="scripts\EventHandler.ts" />
-    <TypeScriptCompile Include="scripts\FileTools.ts" />
-    <TypeScriptCompile Include="scripts\Interfaces.ts" />
-    <TypeScriptCompile Include="scripts\libs\jquery.d.ts" />
-    <TypeScriptCompile Include="scripts\ObjectTools.ts" />
-    <TypeScriptCompile Include="scripts\QueryStringTools.ts" />
-    <TypeScriptCompile Include="scripts\StringTools.ts" />
-    <TypeScriptCompile Include="scripts\UiTools.ts" />
+    <TypeScriptCompile Include="scripts\Binding.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\BindingGlobalContext.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\BindingTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\EventHandler.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\FileTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\Interfaces.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\libs\jquery.d.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\ObjectTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\QueryStringTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\StringTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="scripts\UiTools.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
