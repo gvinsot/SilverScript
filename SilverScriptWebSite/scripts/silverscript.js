@@ -520,6 +520,8 @@ var SS;
                     var result = $(resultString);
                     for (var i = 0; i < itemsLength; i++) {
                         var subnode = result[i];
+                        var datacontext = items[i];
+                        datacontext["TemplateBindingIndex"] = i;
                         BindingTools.SetDataContext(subnode, items[i]);
                     }
                     for (var i = 0; i < htmlnode.children.length; i++) {
