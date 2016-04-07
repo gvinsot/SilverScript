@@ -96,7 +96,7 @@ var SS;
             });
         };
         return StringTools;
-    })();
+    }());
     SS.StringTools = StringTools;
 })(SS || (SS = {}));
 var SS;
@@ -140,7 +140,7 @@ var SS;
             this._invocationContexts = [];
         };
         return EventHandler;
-    })();
+    }());
     SS.EventHandler = EventHandler;
 })(SS || (SS = {}));
 var SS;
@@ -233,7 +233,7 @@ var SS;
             return queryResult;
         };
         return FileTools;
-    })();
+    }());
     SS.FileTools = FileTools;
 })(SS || (SS = {}));
 var SS;
@@ -272,7 +272,7 @@ var SS;
             this._bindedObject = null;
         };
         return Binding;
-    })();
+    }());
     SS.Binding = Binding;
 })(SS || (SS = {}));
 var SS;
@@ -330,7 +330,7 @@ var SS;
             return ref.parentElement == undefined;
         };
         return BindingGlobalContext;
-    })();
+    }());
     SS.BindingGlobalContext = BindingGlobalContext;
 })(SS || (SS = {}));
 var SS;
@@ -369,11 +369,11 @@ var SS;
                 onDataContextChanged = new SS.EventHandler();
                 context["DataContextChanged"] = onDataContextChanged;
             }
-            if (context["IsPropagationAttached"] == undefined) {
+            if (sourceNode["IsPropagationAttached"] == undefined) {
                 onDataContextChanged.Attach(function (ctx, args) {
                     SS.BindingTools.SetDataContext(ctx, "{x:Null}");
                 }, destinationNode);
-                context["IsPropagationAttached"] = true;
+                sourceNode["IsPropagationAttached"] = true;
             }
         });
     }
@@ -382,6 +382,19 @@ var SS;
         SS.BindingTools.SetDataContext(element, value);
     }
     SS.SetDataContext = SetDataContext;
+    function SetDataContextProperty(element, path, value) {
+        BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
+            eval('dataContextObject' + path + '=value;');
+            BindingTools.FireDataContextChanged(dataContextObject, path);
+        });
+    }
+    SS.SetDataContextProperty = SetDataContextProperty;
+    function RaiseDataContextChanged(element) {
+        BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
+            BindingTools.FireDataContextChanged(dataContextObject, null);
+        });
+    }
+    SS.RaiseDataContextChanged = RaiseDataContextChanged;
     var BindingTools = (function () {
         function BindingTools() {
         }
@@ -395,6 +408,15 @@ var SS;
             BindingTools.Bindings.GarbageCollectBindings();
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
+        };
+        BindingTools.FireDataContextChanged = function (context, args) {
+            var eventHandler = context["DataContextChanged"];
+            if (eventHandler != undefined) {
+                eventHandler.FireEvent(args);
+            }
+            else {
+                context["DataContextChanged"] = new SS.EventHandler();
+            }
         };
         BindingTools.Navigate = function (contextNode, uriExpression) {
             var node = document.getElementById(contextNode);
@@ -756,7 +778,7 @@ var SS;
         };
         BindingTools.Bindings = new SS.BindingGlobalContext();
         return BindingTools;
-    })();
+    }());
     SS.BindingTools = BindingTools;
 })(SS || (SS = {}));
 $(function () {
@@ -852,7 +874,7 @@ var SS;
             }
         };
         return ObjectTools;
-    })();
+    }());
     SS.ObjectTools = ObjectTools;
 })(SS || (SS = {}));
 //# sourceMappingURL=silverscript.js.map

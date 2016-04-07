@@ -43,18 +43,32 @@ module SS {
                 onDataContextChanged = new EventHandler();
                 context["DataContextChanged"] = onDataContextChanged;
             }
-            if (context["IsPropagationAttached"] == undefined) {
+            if (sourceNode["IsPropagationAttached"] == undefined) {
                 onDataContextChanged.Attach((ctx, args) => {
                     SS.BindingTools.SetDataContext(ctx, "{x:Null}");
                 }, destinationNode);
-                context["IsPropagationAttached"] = true;
+                sourceNode["IsPropagationAttached"] = true;
             }
         });
     }
+
     export function SetDataContext(element: HTMLElement, value: any) {
         SS.BindingTools.SetDataContext(element, value);
     }
 
+    export function SetDataContextProperty(element: HTMLElement, path: string, value:any) {
+        BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
+            eval('dataContextObject' + path + '=value;');
+
+            BindingTools.FireDataContextChanged(dataContextObject, path);
+        });
+    }
+
+    export function RaiseDataContextChanged(element: HTMLElement) {
+        BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
+            BindingTools.FireDataContextChanged(dataContextObject, null);
+        });
+    }
 
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
@@ -72,6 +86,16 @@ module SS {
             BindingTools.Bindings.GarbageCollectBindings();
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
+        }
+
+        public static FireDataContextChanged(context: any, args: any) {
+            var eventHandler = <EventHandler>context["DataContextChanged"];
+            if (eventHandler != undefined) {
+                eventHandler.FireEvent(args);
+            }
+            else {
+                context["DataContextChanged"] = new EventHandler();
+            }
         }
 
         public static Navigate(contextNode: string, uriExpression: string) {
