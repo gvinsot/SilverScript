@@ -349,6 +349,10 @@ var SS;
         return contextNode["data-context-value"];
     }
     SS.GetDataContext = GetDataContext;
+    function GetSourceParent(childNode) {
+        return SS.BindingTools.GetItemsSourceContext(childNode);
+    }
+    SS.GetSourceParent = GetSourceParent;
     function PushDataContext(contextNodeName, uriExpression, context, callback) {
         var datacontext = GetDataContext(contextNodeName);
         SS.FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
@@ -389,9 +393,9 @@ var SS;
         });
     }
     SS.SetDataContextProperty = SetDataContextProperty;
-    function RaiseDataContextChanged(element) {
+    function RaiseDataContextChanged(element, propertyName) {
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
-            BindingTools.FireDataContextChanged(dataContextObject, null);
+            BindingTools.FireDataContextChanged(dataContextObject, propertyName);
         });
     }
     SS.RaiseDataContextChanged = RaiseDataContextChanged;

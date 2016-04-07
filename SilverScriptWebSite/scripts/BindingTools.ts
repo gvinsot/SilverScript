@@ -19,6 +19,9 @@ module SS {
         var contextNode = SS.BindingTools.GetParentContext(node);
         return contextNode["data-context-value"];
     }
+    export function GetSourceParent(childNode: HTMLElement): Node {
+        return SS.BindingTools.GetItemsSourceContext(childNode);
+    }
 
     export function PushDataContext(contextNodeName: string, uriExpression: string, context: any, callback: delegate) {
         var datacontext = GetDataContext(contextNodeName);
@@ -64,9 +67,9 @@ module SS {
         });
     }
 
-    export function RaiseDataContextChanged(element: HTMLElement) {
+    export function RaiseDataContextChanged(element: HTMLElement,propertyName:string) {
         BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
-            BindingTools.FireDataContextChanged(dataContextObject, null);
+            BindingTools.FireDataContextChanged(dataContextObject, propertyName);
         });
     }
 
