@@ -388,14 +388,16 @@ var SS;
     SS.SetDataContext = SetDataContext;
     function SetDataContextProperty(element, path, value) {
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
-            eval('dataContextObject' + path + '=value;');
+            eval('dataContextObject' + path + '= value;');
             BindingTools.FireDataContextChanged(dataContextObject, path);
+            BindingTools.SetBindingsRecursively(element);
         });
     }
     SS.SetDataContextProperty = SetDataContextProperty;
     function RaiseDataContextChanged(element, propertyName) {
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
             BindingTools.FireDataContextChanged(dataContextObject, propertyName);
+            BindingTools.SetBindingsRecursively(element);
         });
     }
     SS.RaiseDataContextChanged = RaiseDataContextChanged;

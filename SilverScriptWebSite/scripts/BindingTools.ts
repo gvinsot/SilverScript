@@ -61,15 +61,17 @@ module SS {
 
     export function SetDataContextProperty(element: HTMLElement, path: string, value:any) {
         BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
-            eval('dataContextObject' + path + '=value;');
+            eval('dataContextObject' + path + '= value;');
 
             BindingTools.FireDataContextChanged(dataContextObject, path);
+            BindingTools.SetBindingsRecursively(element);
         });
     }
 
-    export function RaiseDataContextChanged(element: HTMLElement,propertyName:string) {
+    export function RaiseDataContextChanged(element: HTMLElement, propertyName:string) {
         BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
             BindingTools.FireDataContextChanged(dataContextObject, propertyName);
+            BindingTools.SetBindingsRecursively(element);
         });
     }
 
@@ -93,6 +95,7 @@ module SS {
 
         public static FireDataContextChanged(context: any, args: any) {
             var eventHandler = <EventHandler>context["DataContextChanged"];
+            
             if (eventHandler != undefined) {
                 eventHandler.FireEvent(args);
             }
