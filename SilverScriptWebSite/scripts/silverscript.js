@@ -390,14 +390,14 @@ var SS;
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
             eval('dataContextObject' + path + '= value;');
             BindingTools.FireDataContextChanged(dataContextObject, path);
-            BindingTools.SetBindingsRecursively(element);
+            BindingTools.SetBindingsRecursively(ctxt);
         });
     }
     SS.SetDataContextProperty = SetDataContextProperty;
     function RaiseDataContextChanged(element, propertyName) {
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
             BindingTools.FireDataContextChanged(dataContextObject, propertyName);
-            BindingTools.SetBindingsRecursively(element);
+            BindingTools.SetBindingsRecursively(ctxt);
         });
     }
     SS.RaiseDataContextChanged = RaiseDataContextChanged;
@@ -613,7 +613,7 @@ var SS;
                 callback(contextNode, null);
                 return;
             }
-            var isHttpLink = !expression.StartWith("{") && (expression.StartWith("/") || expression.StartWith("http://") || expression.StartWith("https://") || expression.indexOf("/") > 0);
+            var isHttpLink = !expression.StartWith("{") && (expression.indexOf("/") > 0);
             var elements = [];
             var matches;
             var regex = /({Binding[^}]*})/g;
