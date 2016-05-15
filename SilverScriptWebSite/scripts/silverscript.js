@@ -616,7 +616,7 @@ var SS;
             var isHttpLink = !expression.StartWith("{") && (expression.indexOf("/") > 0);
             var elements = [];
             var matches;
-            var regex = /({Binding[^}]*})/g;
+            var regex = /({[^}]*})/g;
             var i = 0;
             while ((matches = regex.exec(expression)) != null) {
                 elements[i] = matches[1];
@@ -665,8 +665,9 @@ var SS;
         };
         BindingTools.EvaluateBindingExpression = function (bindingExpression, dataContextObject, node, allowSideEffects) {
             if (allowSideEffects === void 0) { allowSideEffects = true; }
-            var parametersString = bindingExpression.TrimStartOnce("{Binding").TrimStartOnce(" ");
+            var parametersString = bindingExpression.TrimStartOnce("{");
             parametersString = parametersString.TrimEndOnce("}");
+            var pathOnly = parametersString.indexOf("=") < 0;
             var parameters = parametersString.split(",");
             var elementName = null;
             var htmlElement = node;
@@ -681,44 +682,50 @@ var SS;
             var pathDefined = false;
             var param = [];
             var value = null;
-            for (var i = 0; i < parameters.length; i++) {
-                param = parameters[i].split('=');
-                if (param.length == 1) {
-                    path = param[0];
-                }
-                else {
-                    switch (param[0]) {
-                        case "Path":
-                            path = param[1];
-                            pathDefined = true;
-                            break;
-                        case "ElementId":
-                            source = document.getElementById(param[1]);
-                            break;
-                        case "Source":
-                            source = eval(param[1]);
-                            break;
-                        case "Destination":
-                            destination = param[1];
-                            hasSideEffects = true;
-                            break;
-                        case "Converter":
-                            converter = param[1];
-                            break;
-                        case "ConverterParameter":
-                            converterParameter = param[1];
-                            break;
-                        case "StringFormat":
-                            stringFormat = param[1];
-                            break;
-                        case "Mode":
-                            mode = param[1];
-                            break;
-                        case "Value":
-                            value = param[1];
-                            break;
-                        default:
-                            break;
+            if (pathOnly) {
+                path = parametersString;
+                pathDefined = true;
+            }
+            else {
+                for (var i = 0; i < parameters.length; i++) {
+                    param = parameters[i].split('=');
+                    if (param.length == 1) {
+                        path = param[0];
+                    }
+                    else {
+                        switch (param[0]) {
+                            case "Path":
+                                path = param[1];
+                                pathDefined = true;
+                                break;
+                            case "ElementId":
+                                source = document.getElementById(param[1]);
+                                break;
+                            case "Source":
+                                source = eval(param[1]);
+                                break;
+                            case "Destination":
+                                destination = param[1];
+                                hasSideEffects = true;
+                                break;
+                            case "Converter":
+                                converter = param[1];
+                                break;
+                            case "ConverterParameter":
+                                converterParameter = param[1];
+                                break;
+                            case "StringFormat":
+                                stringFormat = param[1];
+                                break;
+                            case "Mode":
+                                mode = param[1];
+                                break;
+                            case "Value":
+                                value = param[1];
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

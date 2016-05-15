@@ -46,7 +46,7 @@
                 </td>
                 <td>
          <div class="getstarteddivcode">
-            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content}&quot;&gt; 
+            &lt;span data-binding=&quot;{Path=name,Destination=Content}&quot;&gt; 
              <br />
              &lt;/span&gt;
             <br />
@@ -54,7 +54,7 @@
              <br />
             or</em><br />
              <br />
-            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=name,Destination=href}&quot;&gt; 
+            &lt;a href=&quot;blank&quot; data-binding=&quot;{Path=name,Destination=href}&quot;&gt; 
              <br />
              My dynamic link <br />
              &lt;/a&gt;
@@ -72,7 +72,7 @@
                      <div class="getstarteddivcode">
 
 
-            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,Mode=OneWay}&quot;&gt; 
+            &lt;span data-binding=&quot;{Path=name,Destination=Content,Mode=OneWay}&quot;&gt; 
                          <br />
                          &lt;/span&gt;
                          <br />
@@ -89,7 +89,7 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-            &lt;input type=&quot;text&quot; data-binding=&quot;{Binding Path=name,Destination=Content,Mode=TwoWay}&quot; &gt; 
+            &lt;input type=&quot;text&quot; data-binding=&quot;{Path=name,Destination=Content,Mode=TwoWay}&quot; &gt; 
                          <br />
                          &lt;/input&gt;
 
@@ -115,8 +115,8 @@ TwoWay Binding
                          <br />
                          &lt;tr&gt;
                          <br />
-                         &lt;td data-binding=&quot;{Binding Path=FirstName,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
-                         &lt;td data-binding=&quot;{Binding Path=LastName,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
+                         &lt;td data-binding=&quot;{Path=FirstName,Destination=Content}&quot;&gt;&lt;/td&gt; <br />
+                         &lt;td data-binding=&quot;{Path=LastName,Destination=Content}&quot;&gt;&lt;/td&gt;<br />
 &nbsp;&lt;/tr&gt;</div>
 
                 </td>
@@ -129,7 +129,7 @@ TwoWay Binding
                 </td>
                 <td>
                      <div class="getstarteddivcode">                         
-            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,Converter=MyMethod,ConverterParameter=myparameter}&quot;&gt;
+            &lt;span data-binding=&quot;{Path=name,Destination=Content,Converter=MyMethod,ConverterParameter=myparameter}&quot;&gt;
                          <br />
                          &lt;/span&gt;
                          <br />
@@ -150,7 +150,7 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-            &lt;span data-binding=&quot;{Binding Path=name,Destination=Content,ElementName=IdOfAnotherDiv}&quot;&gt; &lt;/span&gt;
+            &lt;span data-binding=&quot;{Path=name,Destination=Content,ElementName=IdOfAnotherDiv}&quot;&gt; &lt;/span&gt;
 
 
                      </div>
@@ -168,7 +168,7 @@ TwoWay Binding
                      <div class="getstarteddivcode">
 
 
-            &lt;a href=&quot;blank&quot; data-binding=&quot;{Binding Path=link,Destination=href}{Binding Path=label,Destination=Content}&quot;&gt; &lt;/a&gt;</div>
+            &lt;a href=&quot;blank&quot; data-binding=&quot;{Path=link,Destination=href}{Path=label,Destination=Content}&quot;&gt; &lt;/a&gt;</div>
 
                 </td>
             </tr>

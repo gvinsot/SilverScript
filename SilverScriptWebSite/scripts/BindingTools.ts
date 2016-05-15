@@ -344,7 +344,7 @@ module SS {
             var isHttpLink = !expression.StartWith("{") && (expression.indexOf("/")>0);
             var elements = [];
             var matches;
-            var regex = /({Binding[^}]*})/g;
+            var regex = /({[^}]*})/g;
             var i = 0;
 
             while ((matches = regex.exec(expression)) != null) {
@@ -398,9 +398,10 @@ module SS {
 
         private static EvaluateBindingExpression(bindingExpression: string, dataContextObject: any, node: Node, allowSideEffects: boolean = true): any {
 
-            var parametersString = bindingExpression.TrimStartOnce("{Binding").TrimStartOnce(" ");
+            var parametersString = bindingExpression.TrimStartOnce("{");
             parametersString = parametersString.TrimEndOnce("}");
 
+            var pathOnly = parametersString.indexOf("=") < 0;
             var parameters = parametersString.split(",");
             var elementName = null;
             var htmlElement = node as HTMLElement;
@@ -416,55 +417,62 @@ module SS {
             var param = [];
             var value=null;
 
-            for (var i = 0; i < parameters.length; i++) {
-                param = parameters[i].split('=');
+            if (pathOnly) {
+                path = parametersString;
+                pathDefined = true;
+            }
+            else {
 
-                if (param.length == 1) {
-                    path = param[0];
-                }
-                else {
-                    switch (param[0]) {
-                        case "Path":
-                            path = param[1];
-                            pathDefined = true;
-                            break;
-                        //case "ElementName":
-                        //    source = document.getElementsByName(param[1]);
-                        //    break;
-                        case "ElementId":
-                            source = document.getElementById(param[1]);
-                            break;
-                        case "Source":
-                            source = eval(param[1]);
-                            break;
-                        case "Destination":
-                            destination = param[1];
-                            hasSideEffects = true;
-                            break;
-                        case "Converter":
-                            converter = param[1];
-                            break;
-                        case "ConverterParameter":
-                            converterParameter = param[1];
-                            break;
-                        case "StringFormat":
-                            stringFormat = param[1];
-                            break;
-                        //case "RelativeSource":
-                        //    break;
-                        //case "FallbackValue":
-                        //    break;
-                        case "Mode":
-                            mode = param[1];
-                            break;
-                        case "Value":
-                            value = param[1];
-                            break;
-            
-                        //case "TargetNullValue":
-                        //    break;
-                        default:
-                            break;
+                for (var i = 0; i < parameters.length; i++) {
+                    param = parameters[i].split('=');
+
+                    if (param.length == 1) {
+                        path = param[0];
+                    }
+                    else {
+                        switch (param[0]) {
+                            case "Path":
+                                path = param[1];
+                                pathDefined = true;
+                                break;
+                            //case "ElementName":
+                            //    source = document.getElementsByName(param[1]);
+                            //    break;
+                            case "ElementId":
+                                source = document.getElementById(param[1]);
+                                break;
+                            case "Source":
+                                source = eval(param[1]);
+                                break;
+                            case "Destination":
+                                destination = param[1];
+                                hasSideEffects = true;
+                                break;
+                            case "Converter":
+                                converter = param[1];
+                                break;
+                            case "ConverterParameter":
+                                converterParameter = param[1];
+                                break;
+                            case "StringFormat":
+                                stringFormat = param[1];
+                                break;
+                            //case "RelativeSource":
+                            //    break;
+                            //case "FallbackValue":
+                            //    break;
+                            case "Mode":
+                                mode = param[1];
+                                break;
+                            case "Value":
+                                value = param[1];
+                                break;
+
+                            //case "TargetNullValue":
+                            //    break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }

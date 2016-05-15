@@ -13,14 +13,14 @@
     <br />
     <div data-context="viewmodels/Test2">
 
-        <div data-context="{Binding Path=[0]}">
+        <div data-context="{Path=[0]}">
             Change first user:
-         <input type="text" data-binding="{Binding Path=FirstName,Mode=TwoWay,Destination=value}" style="width: 300px; height: 30px; border: 1px solid lightgray; outline: 1px solid lightgray" value="" />
+         <input type="text" data-binding="{Path=FirstName,Mode=TwoWay,Destination=value}" style="width: 300px; height: 30px; border: 1px solid lightgray; outline: 1px solid lightgray" value="" />
 
         </div>
         <br />
 
-        <table style="width: 100%" data-source="{Binding}" data-template="views/itemOneWay.html">
+        <table style="width: 100%" data-source="{}" data-template="views/itemOneWay.html">
         </table>
         <br />
         <br />
@@ -29,18 +29,18 @@
         Selected :
         <br />
         <div id="SelectedItem">
-            <span data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=FirstName,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=LastName,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=LastName,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=Address,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=Address,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=Age,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=Age,Destination=Content,Mode=OneWay}"></span>
             <br />
             <br />
             Children :<br />
             <br />
-            <table style="width: 100%" data-source="{Binding Path=Children}" data-template="views/childOneWay.html">
+            <table style="width: 100%" data-source="{Children}" data-template="views/childOneWay.html">
             </table>
         </div>
         <br />
@@ -49,13 +49,13 @@
                 Selected child :<br />
         <br />
         <div id="SelectedItem2">
-            <span data-binding="{Binding Path=FirstName,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=FirstName,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=LastName,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=LastName,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=Address,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=Address,Destination=Content,Mode=OneWay}"></span>
             <br />
-            <span data-binding="{Binding Path=Age,Destination=Content,Mode=OneWay}"></span>
+            <span data-binding="{Path=Age,Destination=Content,Mode=OneWay}"></span>
             <br />
         </div>
 
