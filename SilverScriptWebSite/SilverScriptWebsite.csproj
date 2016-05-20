@@ -21,7 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.9</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
     <ApplicationInsightsResourceId>/subscriptions/318e1b85-66c8-401b-bb24-2ede0d8778b0/resourcegroups/gv-silverscript/providers/microsoft.insights/components/gv-silverscript-appinsights</ApplicationInsightsResourceId>
   </PropertyGroup>
