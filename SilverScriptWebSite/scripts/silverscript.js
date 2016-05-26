@@ -404,14 +404,18 @@ var SS;
     var BindingTools = (function () {
         function BindingTools() {
         }
-        BindingTools.NewDataContextObject = function (rootNode) {
+        BindingTools.ResetDataContextObject = function (rootNode) {
             if (rootNode["data-template-value"] == undefined) {
                 rootNode["data-template-value"] = new Object();
             }
         };
-        BindingTools.SetTemplate = function (targetNode, uri) {
+        BindingTools.SetTemplate = function (targetNode, uri, datacontextvalue) {
+            if (datacontextvalue === void 0) { datacontextvalue = null; }
             var node = document.getElementById(targetNode);
             BindingTools.Bindings.GarbageCollectBindings();
+            if (datacontextvalue != null) {
+                node["data-template-value"] = datacontextvalue;
+            }
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         };

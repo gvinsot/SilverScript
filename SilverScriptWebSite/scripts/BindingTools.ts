@@ -78,17 +78,20 @@ module SS {
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
 
-        public static NewDataContextObject(rootNode: Node): void {
+        public static ResetDataContextObject(rootNode: Node): void {
             if (rootNode["data-template-value"] == undefined) {
                 rootNode["data-template-value"] = new Object();
             }
         }
 
-        public static SetTemplate(targetNode: string, uri: string): void {
+        public static SetTemplate(targetNode: string, uri: string, datacontextvalue:any=null): void {
             var node = document.getElementById(targetNode);
 
             // BindingTools.DisposeBindings(node, true);
             BindingTools.Bindings.GarbageCollectBindings();
+            if (datacontextvalue != null) {
+                node["data-template-value"] = datacontextvalue;
+            }
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         }
