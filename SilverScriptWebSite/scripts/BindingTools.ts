@@ -14,11 +14,20 @@ module SS {
         BindingTools.Navigate(contextNode, uriExpression);
     }
 
-    export function GetDataContext(contextNodeName: string): any {
-        var node = document.getElementById(contextNodeName);
-        var contextNode = SS.BindingTools.GetParentContext(node);
-        return contextNode["data-context-value"];
+    export function GetDataContext(contextNode: any): any {
+        var node: HTMLElement;
+        if ((typeof contextNode) == "string") {
+            node = document.getElementById(contextNode);
+        }
+        else {
+            node = contextNode;
+        }
+        
+        var parentNode = SS.BindingTools.GetParentContext(node);
+        return parentNode["data-context-value"];
     }
+
+
     export function GetSourceParent(childNode: HTMLElement): Node {
         return SS.BindingTools.GetItemsSourceContext(childNode);
     }

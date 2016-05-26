@@ -344,10 +344,16 @@ var SS;
         BindingTools.Navigate(contextNode, uriExpression);
     }
     SS.Navigate = Navigate;
-    function GetDataContext(contextNodeName) {
-        var node = document.getElementById(contextNodeName);
-        var contextNode = SS.BindingTools.GetParentContext(node);
-        return contextNode["data-context-value"];
+    function GetDataContext(contextNode) {
+        var node;
+        if ((typeof contextNode) == "string") {
+            node = document.getElementById(contextNode);
+        }
+        else {
+            node = contextNode;
+        }
+        var parentNode = SS.BindingTools.GetParentContext(node);
+        return parentNode["data-context-value"];
     }
     SS.GetDataContext = GetDataContext;
     function GetSourceParent(childNode) {
