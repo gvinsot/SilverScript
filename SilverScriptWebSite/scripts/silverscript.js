@@ -335,8 +335,9 @@ var SS;
 })(SS || (SS = {}));
 var SS;
 (function (SS) {
-    function SetTemplate(targetNode, uri) {
-        SS.BindingTools.SetTemplate(targetNode, uri);
+    function SetTemplate(targetNode, uri, datacontextvalue) {
+        if (datacontextvalue === void 0) { datacontextvalue = null; }
+        SS.BindingTools.SetTemplate(targetNode, uri, datacontextvalue);
     }
     SS.SetTemplate = SetTemplate;
     function Navigate(contextNode, uriExpression) {

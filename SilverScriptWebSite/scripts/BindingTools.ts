@@ -6,8 +6,8 @@
 
 module SS {
 
-    export function SetTemplate(targetNode: string, uri: string) {
-        SS.BindingTools.SetTemplate(targetNode, uri);
+    export function SetTemplate(targetNode: string, uri: string, datacontextvalue:any=null) {
+        SS.BindingTools.SetTemplate(targetNode, uri, datacontextvalue);
     }
 
     export function Navigate(contextNode: string, uriExpression: string) {
