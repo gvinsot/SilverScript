@@ -58,11 +58,11 @@ module SS {
         });
     }
 
-    export function SetDataContext(element: HTMLElement, value: any) {
+    export function SetDataContext(element: any, value: any) {
         SS.BindingTools.SetDataContext(element, value);
     }
 
-    export function SetDataContextProperty(element: HTMLElement, path: string, value:any) {
+    export function SetDataContextProperty(element: any, path: string, value:any) {
         BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
             eval('dataContextObject' + path + '= value;');
 
@@ -303,7 +303,7 @@ module SS {
 
         }
 
-        public static EvaluateDataContext(node, callback: delegate): void {
+        public static EvaluateDataContext(node :any, callback: delegate): void {
             var contextNode = BindingTools.GetParentContext(node);
 
             if (contextNode == undefined) {
