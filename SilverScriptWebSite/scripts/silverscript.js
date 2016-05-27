@@ -345,14 +345,7 @@ var SS;
     }
     SS.Navigate = Navigate;
     function GetDataContext(contextNode) {
-        var node;
-        if ((typeof contextNode) == "string") {
-            node = document.getElementById(contextNode);
-        }
-        else {
-            node = contextNode;
-        }
-        var parentNode = SS.BindingTools.GetParentContext(node);
+        var parentNode = SS.BindingTools.GetParentContext(contextNode);
         return parentNode["data-context-value"];
     }
     SS.GetDataContext = GetDataContext;
@@ -360,13 +353,14 @@ var SS;
         return SS.BindingTools.GetItemsSourceContext(childNode);
     }
     SS.GetSourceParent = GetSourceParent;
-    function PushDataContext(contextNodeName, uriExpression, context, callback) {
-        var datacontext = GetDataContext(contextNodeName);
+    function PushDataContext(contextNode, uriExpression, context, callback) {
+        var datacontext = GetDataContext(contextNode);
         SS.FileTools.PostJsonFile(uriExpression, datacontext, context, callback);
     }
     SS.PushDataContext = PushDataContext;
-    function ApplyBindings(nodeName) {
-        var node = document.getElementById(nodeName);
+    function ApplyBindings(nodeContext) {
+        var node;
+        node = (typeof nodeContext) == "string" ? document.getElementById(nodeContext) : nodeContext;
         SS.BindingTools.SetBindingsRecursively(node);
     }
     SS.ApplyBindings = ApplyBindings;
@@ -411,14 +405,17 @@ var SS;
     var BindingTools = (function () {
         function BindingTools() {
         }
-        BindingTools.ResetDataContextObject = function (rootNode) {
-            if (rootNode["data-template-value"] == undefined) {
-                rootNode["data-template-value"] = new Object();
+        BindingTools.ResetDataContextObject = function (targetNode) {
+            var node;
+            node = (typeof targetNode) == "string" ? document.getElementById(targetNode) : targetNode;
+            if (node["data-template-value"] == undefined) {
+                node["data-template-value"] = new Object();
             }
         };
         BindingTools.SetTemplate = function (targetNode, uri, datacontextvalue) {
             if (datacontextvalue === void 0) { datacontextvalue = null; }
-            var node = document.getElementById(targetNode);
+            var node;
+            node = (typeof targetNode) == "string" ? document.getElementById(targetNode) : targetNode;
             BindingTools.Bindings.GarbageCollectBindings();
             if (datacontextvalue != null) {
                 node["data-template-value"] = datacontextvalue;
@@ -436,7 +433,8 @@ var SS;
             }
         };
         BindingTools.Navigate = function (contextNode, uriExpression) {
-            var node = document.getElementById(contextNode);
+            var node;
+            node = (typeof contextNode) == "string" ? document.getElementById(contextNode) : contextNode;
             BindingTools.Bindings.GarbageCollectBindings();
             BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
                 BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, function (ctxt2, result) {
@@ -446,7 +444,9 @@ var SS;
         };
         BindingTools.DisposeBindings = function (rootNode, skiprootNode) {
             if (skiprootNode === void 0) { skiprootNode = false; }
-            BindingTools.DisposeBindingsRecursively(rootNode, skiprootNode);
+            var node;
+            node = (typeof rootNode) == "string" ? document.getElementById(rootNode) : rootNode;
+            BindingTools.DisposeBindingsRecursively(node, skiprootNode);
             BindingTools.Bindings.GarbageCollectBindings();
         };
         BindingTools.DisposeBindingsRecursively = function (rootNode, skiprootNode) {
@@ -464,7 +464,9 @@ var SS;
                 }
             }
         };
-        BindingTools.SetDataContext = function (node, value) {
+        BindingTools.SetDataContext = function (nodeForContext, value) {
+            var node;
+            node = (typeof nodeForContext) == "string" ? document.getElementById(nodeForContext) : nodeForContext;
             node["data-context-value"] = value;
             BindingTools.SetBindingsRecursively(node);
             var eventHandler = node["DataContextChanged"];
@@ -503,7 +505,8 @@ var SS;
             }
         };
         BindingTools.GetParentContext = function (node) {
-            var parentNode = node;
+            var parentNode;
+            parentNode = (typeof node) == "string" ? document.getElementById(node) : node;
             while (parentNode != null && parentNode.attributes != null && parentNode.attributes["data-context"] == undefined && parentNode["data-context-value"] == undefined) {
                 parentNode = parentNode.parentNode;
             }
