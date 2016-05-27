@@ -612,7 +612,6 @@ var SS;
                     contextloading.FireEvent(datacontextvalue);
                     contextloading.Dispose();
                     delete ctxt["data-context-value-loading"];
-                    callback(node, datacontextvalue);
                 });
             });
         };

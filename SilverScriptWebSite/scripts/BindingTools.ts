@@ -340,7 +340,7 @@ module SS {
                     delete ctxt["data-context-value-loading"];
 
 
-                    callback(node, datacontextvalue);                    
+                    //callback(node, datacontextvalue);                    
                 });
 
             });
