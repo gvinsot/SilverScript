@@ -97,7 +97,7 @@ module SS {
             // BindingTools.DisposeBindings(node, true);
             BindingTools.Bindings.GarbageCollectBindings();
             if (datacontextvalue != null) {
-                node["data-template-value"] = datacontextvalue;
+                node["data-context-value"] = datacontextvalue;
             }
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);

@@ -418,7 +418,7 @@ var SS;
             node = (typeof targetNode) == "string" ? document.getElementById(targetNode) : targetNode;
             BindingTools.Bindings.GarbageCollectBindings();
             if (datacontextvalue != null) {
-                node["data-template-value"] = datacontextvalue;
+                node["data-context-value"] = datacontextvalue;
             }
             $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
