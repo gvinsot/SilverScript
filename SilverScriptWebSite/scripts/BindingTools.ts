@@ -99,7 +99,7 @@ module SS {
             if (datacontextvalue != null) {
                 node["data-context-value"] = datacontextvalue;
             }
-            $(node).attr("data-template", uri);
+            jQuery(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         }
 
