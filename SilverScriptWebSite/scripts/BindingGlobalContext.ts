@@ -31,8 +31,8 @@ module SS {
             if (node.attributes != undefined && node.attributes != null) {
                 //delete node["data-binding-value"];
                 delete node["data-context-value"];
-                delete node["data-template-value"];
-                delete node["data-source-value"];
+                //delete node["data-template-value"];
+                //delete node["data-source-value"];
 
                 if (node["data-binding-ids"] != undefined) {
                     var bindingsIds = node["data-binding-ids"];

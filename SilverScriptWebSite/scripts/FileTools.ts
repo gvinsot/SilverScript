@@ -34,7 +34,7 @@ module SS {
         }
 
         public static ReadJsonFile(path: string, callbackctxt: any, callback: delegate): void {
-            var queryResult: any;
+            var queryResult: any=null;
 
             jQuery.ajax(
                 {
@@ -59,7 +59,7 @@ module SS {
         }
 
         public static PostJsonFile(path: string, postdata: any, callbackctxt: any, callback: delegate, errorCallback: delegate = null): void {
-            var queryResult: any;
+            var queryResult: any=null;
 
             jQuery.ajax(
                 {
@@ -81,7 +81,7 @@ module SS {
         }
 
         public static ReadHtmlFile(path: string, delegate = null, delegateParameters: any[] =null): any {
-            var queryResult: any;
+            var queryResult: any=null;
 
             jQuery.ajax(
                 {
