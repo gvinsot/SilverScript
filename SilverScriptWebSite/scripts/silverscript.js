@@ -420,7 +420,7 @@ var SS;
             if (datacontextvalue != null) {
                 node["data-context-value"] = datacontextvalue;
             }
-            jQuery(node).attr("data-template", uri);
+            $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         };
         BindingTools.FireDataContextChanged = function (context, args) {
@@ -530,7 +530,11 @@ var SS;
             var dataTemplateAttributreValue = dataTemplateAttribute.value == undefined ? dataTemplateAttribute : dataTemplateAttribute.value;
             BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
                 BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, function (ctxt2, templateExpression) {
-                    SS.FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject]);
+                    if (BindingTools.knownTemplates[templateExpression] != undefined) {
+                        BindingTools.EvaluateTemplatePart2(BindingTools.knownTemplates[templateExpression], [node, dataContextObject, templateExpression]);
+                        return;
+                    }
+                    SS.FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject, templateExpression]);
                 }, false);
             });
         };
@@ -540,14 +544,18 @@ var SS;
             templateString = templateString.TrimStart(" ");
             templateString = templateString.TrimEnd(" ");
             templateString = templateString.TrimEnd("\r\n");
-            node["data-template-value"] = templateString;
+            BindingTools.knownTemplates[args[2]] = templateString;
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = node;
             if (dataSourceAttribute != undefined) {
-                var dataContextObject = args[1];
-                var startTime = (new Date()).getTime();
-                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, function (ctxt, items) {
+                var callback = function (ctxt, items) {
                     node["data-source-value"] = items;
+                    var contextloading = ctxt["data-source-value-loading"];
+                    if (contextloading != undefined) {
+                        contextloading.FireEvent(items);
+                        contextloading.Dispose();
+                        delete ctxt["data-source-value-loading"];
+                    }
                     if (items == null || items.length == undefined) {
                         var jhtmlnode = $(htmlnode);
                         jhtmlnode.empty();
@@ -578,7 +586,22 @@ var SS;
                     jhtmlnode.append(result);
                     var nbMilliseconds = (new Date()).getTime() - startTime;
                     console.log("Apply templates: " + nbMilliseconds + "ms");
-                });
+                };
+                var dataContextObject = args[1];
+                var startTime = (new Date()).getTime();
+                var items;
+                if (node["data-source-value"] != undefined && node["data-source-value"] != null) {
+                    items = node["data-source-value"];
+                    callback(node, items);
+                }
+                else {
+                    var datacontextloading = node["data-source-value-loading"];
+                    if (datacontextloading != null) {
+                        return;
+                    }
+                    node["data-source-value-loading"] = new SS.EventHandler();
+                    BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, callback);
+                }
             }
             else {
                 htmlnode.innerHTML = templateString;
@@ -804,6 +827,7 @@ var SS;
             return value;
         };
         BindingTools.Bindings = new SS.BindingGlobalContext();
+        BindingTools.knownTemplates = new Object();
         return BindingTools;
     }());
     SS.BindingTools = BindingTools;

@@ -99,7 +99,7 @@ module SS {
             if (datacontextvalue != null) {
                 node["data-context-value"] = datacontextvalue;
             }
-            jQuery(node).attr("data-template", uri);
+            $(node).attr("data-template", uri);
             SS.BindingTools.EvaluateTemplate(uri, node);
         }
 
@@ -223,17 +223,24 @@ module SS {
             return parentNode;
         }
 
-        // private static knownTemplates = new Array();
+        private static knownTemplates = new Object();
 
         private static EvaluateTemplate(bindingExpression: string, node: Node): void {
 
             var dataTemplateAttribute = node.attributes["data-template"];
             if (dataTemplateAttribute == undefined)
                 return;
+            
             var dataTemplateAttributreValue = dataTemplateAttribute.value == undefined ? dataTemplateAttribute : dataTemplateAttribute.value;
             BindingTools.EvaluateDataContext(node, (ctxt, dataContextObject) => {
                 BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, (ctxt2, templateExpression) => {
-                    FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject]);
+                    // comments to deactivate template caching
+                    if (BindingTools.knownTemplates[templateExpression] != undefined) {
+                        BindingTools.EvaluateTemplatePart2(BindingTools.knownTemplates[templateExpression], [node, dataContextObject, templateExpression]);
+                        return;
+                    }
+                    //
+                    FileTools.ReadHtmlFile(templateExpression, BindingTools.EvaluateTemplatePart2, [node, dataContextObject, templateExpression]);
                 }, false);
             });
         }
@@ -244,16 +251,26 @@ module SS {
             templateString = templateString.TrimStart(" ");
             templateString = templateString.TrimEnd(" ");
             templateString = templateString.TrimEnd("\r\n");
-            node["data-template-value"] = templateString;
+            //node["data-template-value"] = templateString;
+
+            BindingTools.knownTemplates[args[2]] = templateString;
+
             var dataSourceAttribute = node.attributes["data-source"];
             var htmlnode = <HTMLElement>node;
 
             if (dataSourceAttribute != undefined) {
 
-                var dataContextObject: Object = args[1];
-                var startTime = (new Date()).getTime();
-                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, (ctxt, items) => {
+                var callback = (ctxt, items) => {
+
                     node["data-source-value"] = items;
+
+                    var contextloading = <EventHandler>ctxt["data-source-value-loading"];
+                    if (contextloading != undefined) {
+                        contextloading.FireEvent(items);
+                        contextloading.Dispose();
+                        delete ctxt["data-source-value-loading"];
+                    }
+
                     if (items == null || items.length == undefined) {
                         var jhtmlnode = $(htmlnode);
                         jhtmlnode.empty();
@@ -262,7 +279,7 @@ module SS {
                     }
                     var itemsLength = items.length;
                     var resultString = "";
-                
+
                     //lets loop through context items
                     for (var i = 0; i < itemsLength; i++) {
                         resultString = resultString.concat(templateString);
@@ -288,12 +305,35 @@ module SS {
                     var jhtmlnode = $(htmlnode);
 
                     jhtmlnode.empty();
-                    
+
                     jhtmlnode.append(result);
 
                     var nbMilliseconds = (new Date()).getTime() - startTime;
+
+                    
                     console.log("Apply templates: " + nbMilliseconds + "ms");
-                });
+                };
+
+                var dataContextObject: Object = args[1];
+                var startTime = (new Date()).getTime();
+                var items;
+
+                if (node["data-source-value"] != undefined && node["data-source-value"] != null) {
+                    items = node["data-source-value"];
+                    callback(node, items);
+                }
+                else {
+
+                    var datacontextloading = node["data-source-value-loading"] as EventHandler;
+                    if (datacontextloading != null) {
+                        //To solve: we should not get here (evaluating data-source multiple times)
+                        return;
+                    }
+
+                    node["data-source-value-loading"] = new EventHandler();
+
+                    BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, callback);
+                }
             }
             else {
                 htmlnode.innerHTML = templateString;
