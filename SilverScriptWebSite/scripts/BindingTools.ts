@@ -44,16 +44,18 @@ module SS {
             SS.BindingTools.SetDataContext(destinationNode, dataContextObject);
 
             var context = SS.BindingTools.GetParentContext(SS.BindingTools.GetItemsSourceContext(sourceNode));
-            var onDataContextChanged = <EventHandler>context["DataContextChanged"];
-            if (onDataContextChanged == undefined) {
-                onDataContextChanged = new EventHandler();
-                context["DataContextChanged"] = onDataContextChanged;
-            }
-            if (sourceNode["IsPropagationAttached"] == undefined) {
-                onDataContextChanged.Attach((ctx, args) => {
-                    SS.BindingTools.SetDataContext(ctx, "{x:Null}");
-                }, destinationNode);
-                sourceNode["IsPropagationAttached"] = true;
+            if (context != null) {
+                var onDataContextChanged = <EventHandler>context["DataContextChanged"];
+                if (onDataContextChanged == undefined) {
+                    onDataContextChanged = new EventHandler();
+                    context["DataContextChanged"] = onDataContextChanged;
+                }
+                if (sourceNode["IsPropagationAttached"] == undefined) {
+                    onDataContextChanged.Attach((ctx, args) => {
+                        SS.BindingTools.SetDataContext(ctx, "{x:Null}");
+                    }, destinationNode);
+                    sourceNode["IsPropagationAttached"] = true;
+                }
             }
         });
     }

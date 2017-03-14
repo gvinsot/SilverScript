@@ -367,16 +367,18 @@ var SS;
             var destinationNode = document.getElementById(destinationNodeId);
             SS.BindingTools.SetDataContext(destinationNode, dataContextObject);
             var context = SS.BindingTools.GetParentContext(SS.BindingTools.GetItemsSourceContext(sourceNode));
-            var onDataContextChanged = context["DataContextChanged"];
-            if (onDataContextChanged == undefined) {
-                onDataContextChanged = new SS.EventHandler();
-                context["DataContextChanged"] = onDataContextChanged;
-            }
-            if (sourceNode["IsPropagationAttached"] == undefined) {
-                onDataContextChanged.Attach(function (ctx, args) {
-                    SS.BindingTools.SetDataContext(ctx, "{x:Null}");
-                }, destinationNode);
-                sourceNode["IsPropagationAttached"] = true;
+            if (context != null) {
+                var onDataContextChanged = context["DataContextChanged"];
+                if (onDataContextChanged == undefined) {
+                    onDataContextChanged = new SS.EventHandler();
+                    context["DataContextChanged"] = onDataContextChanged;
+                }
+                if (sourceNode["IsPropagationAttached"] == undefined) {
+                    onDataContextChanged.Attach(function (ctx, args) {
+                        SS.BindingTools.SetDataContext(ctx, "{x:Null}");
+                    }, destinationNode);
+                    sourceNode["IsPropagationAttached"] = true;
+                }
             }
         });
     }
@@ -809,10 +811,10 @@ var SS;
             }
             return value;
         };
-        BindingTools.Bindings = new SS.BindingGlobalContext();
-        BindingTools.knownTemplates = new Object();
         return BindingTools;
     }());
+    BindingTools.Bindings = new SS.BindingGlobalContext();
+    BindingTools.knownTemplates = new Object();
     SS.BindingTools = BindingTools;
 })(SS || (SS = {}));
 $(function () {
