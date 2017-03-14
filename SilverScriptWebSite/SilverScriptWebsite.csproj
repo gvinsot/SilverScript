@@ -200,6 +200,11 @@
   <ItemGroup>
     <Content Include="Service References\Application Insights\ConnectedService.json" />
   </ItemGroup>
+  <Target Name="AddTsToContent" AfterTargets="CompileTypeScript" Condition="'$(BuildingProject)' != 'false'">
+     <ItemGroup>
+        <Content Include="@(TypeScriptCompile)"/>
+     </ItemGroup>
+  </Target>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
