@@ -1,0 +1,33 @@
+﻿<div style="margin: 30px">
+<h1>Test Bindings 1<br/></h1>
+<br/>
+    <br />
+    Test two way binding to update objects.<br />
+    <div class="getstarteddivcode">
+        &lt;div data-context=&quot;/viewmodels/Test1&quot;&gt;        <br />
+                &lt;input type=&quot;text&quot; data-binding=&quot;{Path=FirstName,Mode=TwoWay,Destination=value}&quot; value=&quot;&quot;/&gt;<br />
+                <br />              
+        &lt;div data-binding=&quot;{Path=FirstName,Destination=Content,Mode=OneWay}&quot;&gt;---------&lt;/div&gt;<br />       
+        <br />    &lt;/div&gt;
+    </div>
+
+    <br />
+    
+    <br />
+    <div data-context="viewmodels/Test1">        
+        User:
+        <input type="text" data-binding="{Path=FirstName,Mode=TwoWay,Destination=value}" style="width: 300px;height:30px;border:1px solid lightgray; outline:1px solid lightgray" value=""/>
+        <br />
+        <br />
+        If you change the text and unfocus the textblock, following binded text will be automatically updated :<br />
+        <br />
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Path=FirstName,Destination=Content,Mode=OneWay}">---------</div>        
+        <br /> <br />
+        And this one too :
+        <br />
+        <br />
+        <div style="position:absolute; width: 327px; position:relative" data-binding="{Path=FirstName,Destination=Content,Mode=OneWay}">---------</div>        
+        
+    </div>
+</div>
+

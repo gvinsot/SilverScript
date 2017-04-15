@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot/js\site.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Controllers\TestController.cs" />
+    <Content Include="wwwroot\images\github.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\images\logo.png" />
+    <Content Include="wwwroot\images\silverbullet.jpg" />
+    <Content Include="wwwroot\index.htm" />
+    <Content Include="wwwroot\scripts\ai.0.15.0-build58334.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\scripts\ai.0.15.0-build58334.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\scripts\libs\jquery.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\scripts\silverscript.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\scripts\silverscript.js.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\scripts\StopWatch.ts" />
+    <Content Include="wwwroot\styles\app.css" />
+    <Content Include="wwwroot\views\childOneWay.html" />
+    <Content Include="wwwroot\views\Download.html" />
+    <Content Include="wwwroot\views\GetStarted.html" />
+    <Content Include="wwwroot\views\item.html" />
+    <Content Include="wwwroot\views\itemOneWay.html" />
+    <Content Include="wwwroot\views\TestBindings.html" />
+    <Content Include="wwwroot\views\TestBindings2.html" />
+    <Content Include="wwwroot\views\TestLoad.html" />
+    <Content Include="wwwroot\views\WhatIsIt.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\scripts\Binding.ts" />
+    <None Include="wwwroot\scripts\BindingGlobalContext.ts" />
+    <None Include="wwwroot\scripts\BindingTools.ts" />
+    <None Include="wwwroot\scripts\EventHandler.ts" />
+    <None Include="wwwroot\scripts\FileTools.ts" />
+    <None Include="wwwroot\scripts\Interfaces.ts" />
+    <None Include="wwwroot\scripts\libs\jquery.d.ts" />
+    <None Include="wwwroot\scripts\ObjectTools.ts" />
+    <None Include="wwwroot\scripts\QueryStringTools.ts" />
+    <None Include="wwwroot\scripts\StringTools.ts" />
+    <None Include="wwwroot\scripts\UiTools.ts" />
+  </ItemGroup>
+
+</Project>

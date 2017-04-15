@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  silverscript.io:
+    image: silverscript.io
+    build:
+      context: ./Silverscript.io
+      dockerfile: Dockerfile
