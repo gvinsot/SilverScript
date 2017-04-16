@@ -124,7 +124,7 @@ module SS {
             BindingTools.Bindings.GarbageCollectBindings();
 
             BindingTools.EvaluateDataContext(node, (ctxt, dataContextObject) => {
-                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, (ctxt2, result) => {
+                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node,false, (ctxt2, result) => {
                     window.location.href = result;
                 }, false);
             });
@@ -235,7 +235,7 @@ module SS {
             
             var dataTemplateAttributreValue = dataTemplateAttribute.value == undefined ? dataTemplateAttribute : dataTemplateAttribute.value;
             BindingTools.EvaluateDataContext(node, (ctxt, dataContextObject) => {
-                BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, (ctxt2, templateExpression) => {
+                BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, false, (ctxt2, templateExpression) => {
                     // uncomments to deactivate template caching
                     //if (BindingTools.knownTemplates[templateExpression] != undefined) {
                     //    BindingTools.EvaluateTemplatePart2(BindingTools.knownTemplates[templateExpression], [node, dataContextObject, templateExpression]);
@@ -342,7 +342,7 @@ module SS {
                     }
                 };
 
-                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, callback);
+                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, false, callback);
                 //}
             }
             else {
@@ -380,7 +380,7 @@ module SS {
             var contextExpression = contextNode.attributes["data-context"].value;
             BindingTools.EvaluateDataContext(contextNode.parentNode, (ctxt, datacontext) => {
 
-                BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, (ctxt, datacontextvalue) => {
+                BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, false, (ctxt, datacontextvalue) => {
 
                     BindingTools.SetDataContext(ctxt, datacontextvalue, false);
 
@@ -400,11 +400,11 @@ module SS {
 
         public static EvaluateBinding(bindingExpression: string, node: Node, callback: delegate): void {
             BindingTools.EvaluateDataContext(node, (ctxt, datacontext) => {
-                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, callback)
+                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, true, callback)
             });
         }
 
-        private static EvaluateExpression(expression: string, datacontext: any, contextNode: Node, callback: delegate, expectObjectResult: boolean = true): void {
+        private static EvaluateExpression(expression: string, datacontext: any, contextNode: Node, allowSideEffect: boolean, callback: delegate, expectObjectResult: boolean = true): void {
 
             if (expression == null || expression == "{x:Null}") {
                 callback(contextNode, null);
@@ -427,7 +427,7 @@ module SS {
                 var transformed: any;
                 for (var elementKey in elements) {
                     var element = elements[elementKey];
-                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent);
+                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent, false);
                     expression = expression.replace(element, transformed);
                 }
 
@@ -439,7 +439,7 @@ module SS {
                     var datacontextPost = contextNode.attributes["data-context-post"];
                     if (datacontextPost != undefined) {
                         var postExpression = datacontextPost.value;
-                        BindingTools.EvaluateExpression(postExpression, datacontext, parent, (ctxt, postData) => {
+                        BindingTools.EvaluateExpression(postExpression, datacontext, parent, allowSideEffect,(ctxt, postData) => {
                             FileTools.PostJsonFile(expression, postData, ctxt, callback);
                         }, false);
                         return;
@@ -453,7 +453,7 @@ module SS {
             else if (nbElements > 0) {
                 let result = [];
                 for (var i = 0; i < nbElements; i++) {
-                    result[i] = BindingTools.EvaluateBindingExpression(elements[i], datacontext, contextNode);
+                    result[i] = BindingTools.EvaluateBindingExpression(elements[i], datacontext, contextNode, allowSideEffect);
                 }
                 callback(contextNode, result.length == 1 ? result[0] : result);
                 return;
@@ -465,7 +465,7 @@ module SS {
         }
 
 
-        private static EvaluateBindingExpression(bindingExpression: string, dataContextObject: any, node: Node, allowSideEffects: boolean = true): any {
+        private static EvaluateBindingExpression(bindingExpression: string, dataContextObject: any, node: Node, allowSideEffects: boolean): any {
 
             var parametersString = bindingExpression.TrimStartOnce("{");
             parametersString = parametersString.TrimEndOnce("}");
@@ -481,14 +481,13 @@ module SS {
             var stringFormat = undefined;
             var mode = "OneTime";
             var destination = "Content";
-            var hasSideEffects = false;
             var pathDefined = false;
             var param = [];
             var value=null;
 
             if (pathOnly) {
                 path = parametersString;
-                pathDefined = true;
+                pathDefined = true;                
             }
             else {
 
@@ -525,7 +524,6 @@ module SS {
                             case "D":
                             case "Destination":
                                 destination = param[1];
-                                hasSideEffects = true;
                                 break;
                             case "c":
                             case "C":
@@ -636,7 +634,7 @@ module SS {
                 }
             }
 
-            if (hasSideEffects && allowSideEffects) {
+            if (allowSideEffects) {
 
                 if (destination == "Content") {
                     //$(htmlElement).html(value);

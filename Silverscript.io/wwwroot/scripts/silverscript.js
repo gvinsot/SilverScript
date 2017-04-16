@@ -472,7 +472,7 @@ var SS;
             // BindingTools.DisposeBindings(node, true);
             BindingTools.Bindings.GarbageCollectBindings();
             BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
-                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, function (ctxt2, result) {
+                BindingTools.EvaluateExpression(uriExpression, dataContextObject, node, false, function (ctxt2, result) {
                     window.location.href = result;
                 }, false);
             });
@@ -567,7 +567,7 @@ var SS;
                 return;
             var dataTemplateAttributreValue = dataTemplateAttribute.value == undefined ? dataTemplateAttribute : dataTemplateAttribute.value;
             BindingTools.EvaluateDataContext(node, function (ctxt, dataContextObject) {
-                BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, function (ctxt2, templateExpression) {
+                BindingTools.EvaluateExpression(dataTemplateAttributreValue, dataContextObject, node, false, function (ctxt2, templateExpression) {
                     // uncomments to deactivate template caching
                     //if (BindingTools.knownTemplates[templateExpression] != undefined) {
                     //    BindingTools.EvaluateTemplatePart2(BindingTools.knownTemplates[templateExpression], [node, dataContextObject, templateExpression]);
@@ -654,7 +654,7 @@ var SS;
                         }
                     }
                 };
-                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, callback);
+                BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, false, callback);
             }
             else {
                 htmlnode.innerHTML = templateString;
@@ -683,7 +683,7 @@ var SS;
             contextNode["data-context-value-loading"] = new SS.EventHandler();
             var contextExpression = contextNode.attributes["data-context"].value;
             BindingTools.EvaluateDataContext(contextNode.parentNode, function (ctxt, datacontext) {
-                BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, function (ctxt, datacontextvalue) {
+                BindingTools.EvaluateExpression(contextExpression, datacontext, contextNode, false, function (ctxt, datacontextvalue) {
                     BindingTools.SetDataContext(ctxt, datacontextvalue, false);
                     var contextloading = ctxt["data-context-value-loading"];
                     contextloading.FireEvent(datacontextvalue);
@@ -695,10 +695,10 @@ var SS;
         };
         BindingTools.EvaluateBinding = function (bindingExpression, node, callback) {
             BindingTools.EvaluateDataContext(node, function (ctxt, datacontext) {
-                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, callback);
+                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, true, callback);
             });
         };
-        BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, callback, expectObjectResult) {
+        BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, allowSideEffect, callback, expectObjectResult) {
             if (expectObjectResult === void 0) { expectObjectResult = true; }
             if (expression == null || expression == "{x:Null}") {
                 callback(contextNode, null);
@@ -719,7 +719,7 @@ var SS;
                 var transformed;
                 for (var elementKey in elements) {
                     var element = elements[elementKey];
-                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent);
+                    transformed = BindingTools.EvaluateBindingExpression(element, datacontext, parent, false);
                     expression = expression.replace(element, transformed);
                 }
                 if (!expectObjectResult) {
@@ -730,7 +730,7 @@ var SS;
                     var datacontextPost = contextNode.attributes["data-context-post"];
                     if (datacontextPost != undefined) {
                         var postExpression = datacontextPost.value;
-                        BindingTools.EvaluateExpression(postExpression, datacontext, parent, function (ctxt, postData) {
+                        BindingTools.EvaluateExpression(postExpression, datacontext, parent, allowSideEffect, function (ctxt, postData) {
                             SS.FileTools.PostJsonFile(expression, postData, ctxt, callback);
                         }, false);
                         return;
@@ -744,7 +744,7 @@ var SS;
             else if (nbElements > 0) {
                 var result = [];
                 for (var i = 0; i < nbElements; i++) {
-                    result[i] = BindingTools.EvaluateBindingExpression(elements[i], datacontext, contextNode);
+                    result[i] = BindingTools.EvaluateBindingExpression(elements[i], datacontext, contextNode, allowSideEffect);
                 }
                 callback(contextNode, result.length == 1 ? result[0] : result);
                 return;
@@ -755,7 +755,6 @@ var SS;
             }
         };
         BindingTools.EvaluateBindingExpression = function (bindingExpression, dataContextObject, node, allowSideEffects) {
-            if (allowSideEffects === void 0) { allowSideEffects = true; }
             var parametersString = bindingExpression.TrimStartOnce("{");
             parametersString = parametersString.TrimEndOnce("}");
             var pathOnly = parametersString.indexOf("=") < 0;
@@ -769,7 +768,6 @@ var SS;
             var stringFormat = undefined;
             var mode = "OneTime";
             var destination = "Content";
-            var hasSideEffects = false;
             var pathDefined = false;
             var param = [];
             var value = null;
@@ -810,7 +808,6 @@ var SS;
                             case "D":
                             case "Destination":
                                 destination = param[1];
-                                hasSideEffects = true;
                                 break;
                             case "c":
                             case "C":
@@ -917,7 +914,7 @@ var SS;
                     value = null;
                 }
             }
-            if (hasSideEffects && allowSideEffects) {
+            if (allowSideEffects) {
                 if (destination == "Content") {
                     //$(htmlElement).html(value);
                     htmlElement.innerHTML = value == null ? "" : value;
