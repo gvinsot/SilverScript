@@ -29,16 +29,13 @@ module SS {
 
         DisposeNodeBindings(node) {
             if (node.attributes != undefined && node.attributes != null) {
-                //delete node["data-binding-value"];
                 delete node["data-context-value"];
-                //delete node["data-template-value"];
-                //delete node["data-source-value"];
-
+                delete node["SS-HasBindingCallBack"];
                 if (node["data-binding-ids"] != undefined) {
                     var bindingsIds = node["data-binding-ids"];
                     for (var bindingId in bindingsIds) {
                         var binding = this.BindingDictionary[bindingId] as Binding;
-                        if (binding.Node != null) {
+                        if (binding!=undefined && binding.Node != null) {
                             binding.Dispose();
                             delete this.BindingDictionary[bindingId];
                             binding = null;

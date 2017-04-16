@@ -64,6 +64,12 @@ module SS {
         SS.BindingTools.SetDataContext(element, value);
     }
 
+    export function RevaluateDataContext(element: string | HTMLElement) {
+        var node = (typeof element) == "string" ? document.getElementById(element as string) : element as HTMLElement;
+        SS.BindingTools.DisposeBindings(node,false);
+        ApplyBindings(node);
+    }
+
     export function SetDataContextProperty(element: any, path: string, value:any) {
         BindingTools.EvaluateDataContext(element, (ctxt, dataContextObject) => {
             eval('dataContextObject' + path + '= value;');
@@ -82,15 +88,6 @@ module SS {
 
     export class BindingTools {
         public static Bindings: BindingGlobalContext = new BindingGlobalContext();
-
-        public static ResetDataContextObject(targetNode: any): void {
-            var node: HTMLElement;
-            node = (typeof targetNode) == "string" ? document.getElementById(targetNode) : targetNode;
-
-            //if (node["data-template-value"] == undefined) {
-            //    node["data-template-value"] = new Object();
-            //}
-        }
 
         public static SetTemplate(targetNode: any, uri: string, datacontextvalue: any = null): void {
             var node: HTMLElement;
@@ -144,14 +141,14 @@ module SS {
                 return;
             if (!skiprootNode)
                 BindingTools.Bindings.DisposeNodeBindings(rootNode);
-            else {
+           // else {
                 var rootNodeChildren = rootNode.children;
                 for (var key in rootNodeChildren) {
                     if (!rootNodeChildren.hasOwnProperty(key)) continue;
 
                     BindingTools.DisposeBindingsRecursively(<HTMLElement>rootNodeChildren[key]);
                 }
-            }
+            //}
         }
 
         public static SetDataContext(nodeForContext: any, value: any, applyBindings: boolean = true) {
@@ -618,7 +615,7 @@ module SS {
                 }
             } else if (mode == "TwoWay" && dataContextObject != null) {
                 if (htmlElement["SS-HasBindingCallBack"] == undefined) {
-                    var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
+                    BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
                     var callback = () => {
                         if (!sourceIsArray) {
                             var evalString = "dataContextObject." + path + "=htmlElement.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);";
@@ -630,10 +627,9 @@ module SS {
                             }
                         }
                     };
-                    //htmlElement.onchange = callback;
                     htmlElement.onkeyup = callback;
                     htmlElement["SS-HasBindingCallBack"] = true;
-                }
+                }                
             }
             else if (mode == "Eval") {
                 try {
@@ -651,8 +647,11 @@ module SS {
                     //$(htmlElement).html(value);
                     htmlElement.innerHTML = value == null ? "" : value;
                 }
-                else {
-                    $(htmlElement).attr(destination, value);
+                else {                    
+                    if (mode == "TwoWay" && destination=="value")
+                        (htmlElement as HTMLInputElement).value = value;
+                    else
+                        $(htmlElement).attr(destination, value);
                 }
             }
 

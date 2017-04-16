@@ -320,15 +320,13 @@ var SS;
         };
         BindingGlobalContext.prototype.DisposeNodeBindings = function (node) {
             if (node.attributes != undefined && node.attributes != null) {
-                //delete node["data-binding-value"];
                 delete node["data-context-value"];
-                //delete node["data-template-value"];
-                //delete node["data-source-value"];
+                delete node["SS-HasBindingCallBack"];
                 if (node["data-binding-ids"] != undefined) {
                     var bindingsIds = node["data-binding-ids"];
                     for (var bindingId in bindingsIds) {
                         var binding = this.BindingDictionary[bindingId];
-                        if (binding.Node != null) {
+                        if (binding != undefined && binding.Node != null) {
                             binding.Dispose();
                             delete this.BindingDictionary[bindingId];
                             binding = null;
@@ -420,6 +418,12 @@ var SS;
         SS.BindingTools.SetDataContext(element, value);
     }
     SS.SetDataContext = SetDataContext;
+    function RevaluateDataContext(element) {
+        var node = (typeof element) == "string" ? document.getElementById(element) : element;
+        SS.BindingTools.DisposeBindings(node, false);
+        ApplyBindings(node);
+    }
+    SS.RevaluateDataContext = RevaluateDataContext;
     function SetDataContextProperty(element, path, value) {
         BindingTools.EvaluateDataContext(element, function (ctxt, dataContextObject) {
             eval('dataContextObject' + path + '= value;');
@@ -438,13 +442,6 @@ var SS;
     var BindingTools = (function () {
         function BindingTools() {
         }
-        BindingTools.ResetDataContextObject = function (targetNode) {
-            var node;
-            node = (typeof targetNode) == "string" ? document.getElementById(targetNode) : targetNode;
-            //if (node["data-template-value"] == undefined) {
-            //    node["data-template-value"] = new Object();
-            //}
-        };
         BindingTools.SetTemplate = function (targetNode, uri, datacontextvalue) {
             if (datacontextvalue === void 0) { datacontextvalue = null; }
             var node;
@@ -490,14 +487,14 @@ var SS;
                 return;
             if (!skiprootNode)
                 BindingTools.Bindings.DisposeNodeBindings(rootNode);
-            else {
-                var rootNodeChildren = rootNode.children;
-                for (var key in rootNodeChildren) {
-                    if (!rootNodeChildren.hasOwnProperty(key))
-                        continue;
-                    BindingTools.DisposeBindingsRecursively(rootNodeChildren[key]);
-                }
+            // else {
+            var rootNodeChildren = rootNode.children;
+            for (var key in rootNodeChildren) {
+                if (!rootNodeChildren.hasOwnProperty(key))
+                    continue;
+                BindingTools.DisposeBindingsRecursively(rootNodeChildren[key]);
             }
+            //}
         };
         BindingTools.SetDataContext = function (nodeForContext, value, applyBindings) {
             if (applyBindings === void 0) { applyBindings = true; }
@@ -898,7 +895,7 @@ var SS;
             }
             else if (mode == "TwoWay" && dataContextObject != null) {
                 if (htmlElement["SS-HasBindingCallBack"] == undefined) {
-                    var binding = BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
+                    BindingTools.Bindings.CreateBinding(dataContextObject, path, htmlElement);
                     var callback = function () {
                         if (!sourceIsArray) {
                             var evalString = "dataContextObject." + path + "=htmlElement.value; if (dataContextObject.PropertyChanged != undefined) dataContextObject.PropertyChanged.FireEvent(path);";
@@ -910,7 +907,6 @@ var SS;
                             }
                         }
                     };
-                    //htmlElement.onchange = callback;
                     htmlElement.onkeyup = callback;
                     htmlElement["SS-HasBindingCallBack"] = true;
                 }
@@ -930,7 +926,10 @@ var SS;
                     htmlElement.innerHTML = value == null ? "" : value;
                 }
                 else {
-                    $(htmlElement).attr(destination, value);
+                    if (mode == "TwoWay" && destination == "value")
+                        htmlElement.value = value;
+                    else
+                        $(htmlElement).attr(destination, value);
                 }
             }
             return value;

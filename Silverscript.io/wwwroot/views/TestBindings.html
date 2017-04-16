@@ -14,7 +14,7 @@
     <br />
     
     <br />
-    <div data-context="viewmodels/Test1">        
+    <div id="contextDiv" data-context="viewmodels/Test1">        
         User:
         <input type="text" data-binding="{Path=FirstName,Mode=TwoWay,Destination=value}" style="width: 300px;height:30px;border:1px solid lightgray; outline:1px solid lightgray" value=""/>
         <br />
@@ -27,7 +27,8 @@
         <br />
         <br />
         <div style="position:absolute; width: 327px; position:relative" data-binding="{Path=FirstName,Mode=OneWay}">---------</div>        
-        
+        <br/>
+        <button onclick="SS.RevaluateDataContext('contextDiv');" >Load new data context</button>
     </div>
 </div>
 
