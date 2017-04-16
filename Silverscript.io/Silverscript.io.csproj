@@ -44,6 +44,7 @@
     <Content Include="wwwroot\views\GetStarted.html" />
     <Content Include="wwwroot\views\item.html" />
     <Content Include="wwwroot\views\itemOneWay.html" />
+    <Content Include="wwwroot\views\More.html" />
     <Content Include="wwwroot\views\TestBindings.html" />
     <Content Include="wwwroot\views\TestBindings2.html" />
     <Content Include="wwwroot\views\TestLoad.html" />

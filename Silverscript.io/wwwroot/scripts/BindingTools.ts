@@ -400,7 +400,18 @@ module SS {
 
         public static EvaluateBinding(bindingExpression: string, node: Node, callback: delegate): void {
             BindingTools.EvaluateDataContext(node, (ctxt, datacontext) => {
-                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, true, callback)
+                BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, true, callback);
+
+                var completedAttribute = node.attributes["data-binding-completed"];
+                if (completedAttribute!=undefined) {
+                    var bindingCompletedAttribute = completedAttribute.value;
+                    try {
+                        eval(bindingCompletedAttribute);
+                    }
+                    catch (ex) {
+                        console.log("Evaluation error on data-template-loaded : " + bindingCompletedAttribute + "  " + ex);
+                    }
+                }
             });
         }
 
@@ -505,14 +516,14 @@ module SS {
                                 path = param[1];
                                 pathDefined = true;
                                 break;
-                            case "en":
-                            case "EN":
-                            case "ElementName":
+                            case "sen":
+                            case "SEN":
+                            case "SourceElementName":
                                 source = document.getElementsByName(param[1]);
                                 break;
-                            case "ei":
-                            case "EI":
-                            case "ElementId":
+                            case "sei":
+                            case "SEI":
+                            case "SourceElementId":
                                 source = document.getElementById(param[1]);
                                 break;
                             case "s":
@@ -530,7 +541,7 @@ module SS {
                             case "Converter":
                                 converter = param[1];
                                 break;
-                            case "c":
+                            case "cp":
                             case "CP":
                             case "ConverterParameter":
                                 converterParameter = param[1];

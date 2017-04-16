@@ -696,6 +696,16 @@ var SS;
         BindingTools.EvaluateBinding = function (bindingExpression, node, callback) {
             BindingTools.EvaluateDataContext(node, function (ctxt, datacontext) {
                 BindingTools.EvaluateExpression(bindingExpression, datacontext, ctxt, true, callback);
+                var completedAttribute = node.attributes["data-binding-completed"];
+                if (completedAttribute != undefined) {
+                    var bindingCompletedAttribute = completedAttribute.value;
+                    try {
+                        eval(bindingCompletedAttribute);
+                    }
+                    catch (ex) {
+                        console.log("Evaluation error on data-template-loaded : " + bindingCompletedAttribute + "  " + ex);
+                    }
+                }
             });
         };
         BindingTools.EvaluateExpression = function (expression, datacontext, contextNode, allowSideEffect, callback, expectObjectResult) {
@@ -789,14 +799,14 @@ var SS;
                                 path = param[1];
                                 pathDefined = true;
                                 break;
-                            case "en":
-                            case "EN":
-                            case "ElementName":
+                            case "sen":
+                            case "SEN":
+                            case "SourceElementName":
                                 source = document.getElementsByName(param[1]);
                                 break;
-                            case "ei":
-                            case "EI":
-                            case "ElementId":
+                            case "sei":
+                            case "SEI":
+                            case "SourceElementId":
                                 source = document.getElementById(param[1]);
                                 break;
                             case "s":
