@@ -824,7 +824,7 @@ var SS;
                             case "Converter":
                                 converter = param[1];
                                 break;
-                            case "c":
+                            case "cp":
                             case "CP":
                             case "ConverterParameter":
                                 converterParameter = param[1];

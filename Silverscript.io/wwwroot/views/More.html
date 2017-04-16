@@ -1,0 +1,277 @@
+﻿<div style="margin: 30px">
+   <h1>  <img style="vertical-align:middle; float:left;height:50px"  src="images/logo.png" />
+    <span style="vertical-align:middle; margin-left:20px;height:50px;line-height:50px">
+           Know more about this framework.
+    </span>
+    </h1>
+    <br />
+    This framework is intended to simplify to the maximum the writing of a web application. It is optimized for MVVM pattern.<br /> 
+    You could also use it without any client'side code.<br />
+    It is fully compatible with html5, there is no specific key word or syntax that would break your existing tools.<br />
+
+    <br />
+     
+
+
+
+    <div style="font-size:large">
+        <h2>General silver expressions syntax</h2>
+
+        All data bindings and data contexts follow the same convention called silver expressions.<br />
+        This syntax concerns data-binding attributes, data-context, data-template and data-source attributes.<br />
+        You can concatenate multiple expressions.<br />
+        <br />
+        <div class="getstarteddivcode">
+            data-context="{Path=XXX,Mode=YYY,Converter=ZZZ}"<br />
+            <br />
+            data-binding="{p=XXX,m=YYY}{p=ZZZ,d=AAA}"<br />
+            <br/>
+            data-template="{p=XXX,m=YYY}"<br />
+        </div>
+        <br/>
+        <br />
+        List of available parameters:<br />
+        <br />
+        <table>
+            <tr>
+                <td>Path <br/> p<br /><br /></td>
+                <td>Property or field of datacontext to bind (can also be an expression)
+                <br/>
+                    <div class="getstarteddivcode">
+                        <table>
+                            <tr>
+                                <td>Path=Name</td>
+                                <td>the field Name of the datacontext (it will be interpreted as Datacontext.Name)</td>
+                            </tr>
+                            <tr>
+                                <td>p=.</td>
+                                <td>means the data context itself</td>
+                            </tr>
+                            <tr>
+                                <td>p=[1]</td>
+                                <td>element 1 of data context (when data context is a list)</td>
+                            </tr>
+                            <tr>
+                                <td>p=[1].SubObject.Name</td>
+                                <td>you can use any subobject value directly</td>
+                            </tr>
+                        </table>
+                    </div>        
+                
+                </td>
+            </tr>
+            <tr>
+                <td>Destination <br /> d<br /><br/></td>
+                <td>name of html attribute to be binded. By default, binding will be done with the content of the current html node
+                    <div class="getstarteddivcode">
+                        <table>
+                            <tr>
+                                <td>Destination=href</td>
+                                <td>bind the resolved value from datacontext to the href attribute of the current htmlnode (here we suppose it is a link)</td>
+                            </tr>                            
+                            <tr>
+                                <td>d=Content</td>
+                                <td>bind the content of the current html node (it is the default, so you normally do not specify this)</td>
+                            </tr>
+                        </table>
+                    </div>        
+                </td>
+            </tr>
+            <tr>
+                <td>Mode <br /> m<br /><br /></td>
+                <td>it can be OneTime (Default), OneWay, TwoWay or Eval
+                    <div class="getstarteddivcode">
+                        <table>
+                            <tr>
+                                <td>Mode=OneTime</td>
+                                <td>Binding is set the first time but never evaluated again (default)</td>
+                            </tr>
+                            <tr>
+                                <td>m=OneWay</td>
+                                <td>Binding is updated each time the datacontext property changes</td>
+                            </tr>
+                            <tr>
+                                <td>m=TwoWay</td>
+                                <td>For inputs only : in addition to OneWay behavior, if input is changed, then datacontext field is changed accordingly.</td>
+                            </tr>
+                            <tr>
+                                <td>m=Eval</td>
+                                <td>Binding is evaluated directly from a custom expression (see Value Parameter)</td>
+                            </tr>
+                        </table>
+                    </div>
+                
+                </td>
+            </tr>
+            <tr>
+                <td>Converter <br /> c<br /><br /></td>
+                <td>a method name to use to convert the value</td>
+            </tr>
+            <tr>
+                <td>ConverterParameter <br /> cp<br /><br /></td>
+                <td>an additionnal parameter to pass to the conversion method</td>
+            </tr>
+            <tr>
+                <td>Source <br /> s<br /><br /></td>
+                <td>Path to a static object to use instead of current datacontext</td>
+            </tr>
+            <tr>
+                <td>SourceElementName <br /> sen<br /><br /></td>
+                <td>Use an html element (search by name) as a source for binding</td>
+            </tr>
+            <tr>
+                <td>SourceElementId <br /> sei<br /><br /></td>
+                <td>Use an html element (search by id) as a source for binding</td>
+            </tr>
+            <tr>
+                <td>Value <br /> v<br /><br /></td>
+                <td>If mode is Eval, provide here an expression to be evaluated and set as a result of expression evaluation (binding or datacontext)</td>
+            </tr>
+        </table>
+        <br/>
+        <h2>data-context</h2>
+        This attribute is evaluated depending on the parent datacontext. <br/>
+        Meaning you can use an expression in it.<br />
+
+        <div class="getstarteddivcode">
+            <table>
+                <tr>
+                    <td>data-context="{m=Eval,v=new CustomObject()}"</td>
+                    <td>Create a new CustomObject instance as a datacontext</td>
+                </tr>
+                <tr>
+                    <td>data-context="{subObject}"</td>
+                    <td>data context is set from parent data context taking ParentDataContext.subObject</td>
+                </tr>
+                <tr>
+                    <td>data-context="/api/mycontroller"</td>
+                    <td>Retrieve data context a controller on my website</td>
+                </tr>
+                <tr>
+                    <td>data-context="/api/mycontroller/{Name}"</td>
+                    <td>Retrieve data context a controller on my website providing parameter Name from parent data context</td>
+                </tr>
+                <tr>
+                    <td>data-context="https://www.anywebsite.com/anyfileorservice.json"</td>
+                    <td>Retrieve data context from any web site json source</td>
+                </tr>
+                <tr>
+                    <td>data-context="https://www.anywebsite.com/anyfileorservice?param={p=Name,c=myConverter}"</td>
+                    <td>Retrieve data context from any web site json source passing Name from parent data context as query parameter</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>data-binding</h2>
+        This attributes does binding with data context and a DOM element
+
+        <h2>data-binding-completed</h2>
+        Content of this attribute will be evaluated every time data binding is complete.
+
+        <h2>data-template</h2>
+        This attribute will provoque to replace the content of the current html node with the resulting html of the evaluation.
+    
+        <div class="getstarteddivcode">
+        <table>
+            <tr>
+                <td>data-template="/views/anyfile.html"</td>
+                <td>Retrieve data template on my website</td>
+            </tr>
+            <tr>
+                <td>data-template="/api/mycontroller/{Name}"</td>
+                <td>Retrieve data template a controller on my website providing parameter Name from parent data context</td>
+            </tr>
+            <tr>
+                <td>data-template="https://www.anywebsite.com/template.html</td>
+                <td>Retrieve data template from any web site json source</td>
+            </tr>
+            <tr>
+                <td>data-template="https://www.anywebsite.com/anyfileorservice?param={Name}"</td>
+                <td>Retrieve data template from any web site json source passing Name from parent data context as query parameter</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2>data-source</h2>
+    In combination with data-template, allows to apply a template to multiple items.<br/>
+    data-source evaluation should result in a list of objects.
+
+    <div class="getstarteddivcode">
+        <table>
+            <tr>
+                <td>data-source="{subObject}"</td>
+                <td>data source is set from parent data context taking ParentDataContext.subObject</td>
+            </tr>
+            <tr>
+                <td>data-source="/api/mycontroller"</td>
+                <td>Retrieve data context a controller on my website</td>
+            </tr>
+            <tr>
+                <td>data-source="/api/mycontroller/{Name}"</td>
+                <td>Retrieve data source a controller on my website providing parameter Name from parent data context</td>
+            </tr>
+            <tr>
+                <td>data-source="https://www.anywebsite.com/anyfileorservice.json"</td>
+                <td>Retrieve data sourcce from any web site json source</td>
+            </tr>
+            <tr>
+                <td>data-context="https://www.anywebsite.com/anyfileorservice?param={Name}"</td>
+                <td>Retrieve data context from any web site json source passing Name from parent data context as query parameter</td>
+            </tr>
+        </table>
+    </div>
+
+
+        <h2>data-template-loaded</h2>
+    Content of this attribute will be evaluated every time data template is applied.
+
+        <h2>SS Module methods</h2>
+
+    SS.SetTemplate(targetNode: any, uri: string, datacontextvalue:any=null);<br />
+    Applies a template to a target html node (can be node it self or its name)
+    <br />
+    <br />
+    SS.Navigate(contextNode: any, uriExpression: string);<br />
+    Navigate to a specific uri evaluated from a silver expression.
+    <br />
+    <br />
+    SS.GetDataContext(contextNode: any): any;<br />
+    Retrieve current data context object for a specifif node
+    <br />
+    <br />
+    SS.GetSourceParent(childNode: HTMLElement): Node;<br />
+    Retrieve the html parent node that has a data context explicitly defined.
+    <br />
+    <br />
+    SS.PushDataContext(contextNode: any, uriExpression: string, context: any, callback: delegate);<br />
+    Take a node data context and put it at the provided uri silver expression.
+    <br />
+    <br />
+    SS.ApplyBindings(nodeContext: any);<br />
+    Manually re apply bindings on a node.
+    <br />
+    <br />
+    SS.PropagateDataContext(sourceNode: HTMLElement, destinationNodeId: string);<br/>
+    Propagate data context from a source node to a destination node.
+    <br />
+    <br />
+    SS.SetDataContext(element: any, value: any);<br />
+    Set the data context of a node from javascript.
+    <br />
+    <br />
+    SS.SetDataContextProperty(element: any, path: string, value:any);<br />
+    Modify the field or property of a node datacontext.
+    <br />
+    <br />
+    SS.RaiseDataContextChanged(element: HTMLElement, propertyName:string);<br />
+    Raise an event indicating that a property of a data context changed.
+    <br />
+    <br />
+
+
+
+        <h2>data-context-post</h2>
+        Not implemented yet ! Provide a url for three way binding : all data context modifications will be put at this address.
+
+</div>
+</div>
