@@ -36,8 +36,6 @@ module SS {
         SS.BindingTools.SetBindingsRecursively(node);
     }
 
-    //static var PropagationId = 0;
-
     export function PropagateDataContext(sourceNode: HTMLElement, destinationNodeId: string) {
         BindingTools.EvaluateDataContext(sourceNode, (ctxt, dataContextObject) => {
             var destinationNode = document.getElementById(destinationNodeId);
@@ -141,14 +139,12 @@ module SS {
                 return;
             if (!skiprootNode)
                 BindingTools.Bindings.DisposeNodeBindings(rootNode);
-           // else {
-                var rootNodeChildren = rootNode.children;
-                for (var key in rootNodeChildren) {
-                    if (!rootNodeChildren.hasOwnProperty(key)) continue;
-
-                    BindingTools.DisposeBindingsRecursively(<HTMLElement>rootNodeChildren[key]);
-                }
-            //}
+            var rootNodeChildren = rootNode.children;
+            for (var key in rootNodeChildren) {
+                if (!rootNodeChildren.hasOwnProperty(key))
+                    continue;
+                BindingTools.DisposeBindingsRecursively(<HTMLElement>rootNodeChildren[key]);
+            }
         }
 
         public static SetDataContext(nodeForContext: any, value: any, applyBindings: boolean = true) {
