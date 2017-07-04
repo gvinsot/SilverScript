@@ -1,6 +1,6 @@
 {
   "name": "silverscript.io",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple Binding Framework",
   "main": "silverscript.js",
   "scripts": {
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gvinsot/silversript"
+    "url": "https://github.com/gvinsot/SilverScript"
   },
   "keywords": [
     "binding"
   ],
   "bugs": {
-    "url": "https://github.com/gvinsot/silversript/issues"
+    "url": "https://github.com/gvinsot/SilverScript/issues"
   },
-  "homepage": "https://github.com/gvinsot/silversript",
+  "homepage": "https://github.com/gvinsot/SilverScript",
   "_id": "silverscript.io@1.0.0",
   "_shasum": "9c44da9206ab22c709891a11c0867bad78981134",
   "_from": "silverscript.io@*"

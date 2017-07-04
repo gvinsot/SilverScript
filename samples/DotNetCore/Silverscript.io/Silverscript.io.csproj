@@ -8,8 +8,7 @@
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PreBuildEvent>set myPath=D:\Projects\Silverscript\samples\DotNetCore\
-robocopy %myPath%..\..\source\ %myPath%\Silverscript.io\wwwroot\scripts\ /IS /S /XD node_modules
+    <PreBuildEvent>robocopy ..\..\..\..\..\..\source\ ..\..\..\wwwroot\scripts\ /IS /S /XD node_modules
 exit 0</PreBuildEvent>
   </PropertyGroup>
 
