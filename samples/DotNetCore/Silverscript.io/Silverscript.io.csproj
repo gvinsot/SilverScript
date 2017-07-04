@@ -8,7 +8,17 @@
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PreBuildEvent>set myPath=D:\Projects\Silverscript\samples\DotNetCore\
+robocopy %myPath%..\..\source\ %myPath%\Silverscript.io\wwwroot\scripts\ /IS /S /XD node_modules
+exit 0</PreBuildEvent>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\scripts\libs\**" />
+    <Content Remove="wwwroot\scripts\libs\**" />
+    <EmbeddedResource Remove="wwwroot\scripts\libs\**" />
+    <None Remove="wwwroot\scripts\libs\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot/js\site.min.js" />
@@ -22,22 +32,8 @@
     <Content Include="wwwroot\images\logo.png" />
     <Content Include="wwwroot\images\silverbullet.jpg" />
     <Content Include="wwwroot\index.htm" />
-    <Content Include="wwwroot\scripts\ai.0.15.0-build58334.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\scripts\ai.0.15.0-build58334.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\scripts\libs\jquery.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\scripts\silverscript.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\scripts\silverscript.js.map">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wwwroot\scripts\StopWatch.ts" />
+    <Content Include="wwwroot\scripts\silverscript.js" />
+    <Content Include="wwwroot\scripts\silverscript.js.map" />
     <Content Include="wwwroot\styles\app.css" />
     <Content Include="wwwroot\views\childOneWay.html" />
     <Content Include="wwwroot\views\Download.html" />
@@ -66,17 +62,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="wwwroot\scripts\Binding.ts" />
-    <None Include="wwwroot\scripts\BindingGlobalContext.ts" />
-    <None Include="wwwroot\scripts\BindingTools.ts" />
-    <None Include="wwwroot\scripts\EventHandler.ts" />
-    <None Include="wwwroot\scripts\FileTools.ts" />
-    <None Include="wwwroot\scripts\Interfaces.ts" />
-    <None Include="wwwroot\scripts\libs\jquery.d.ts" />
-    <None Include="wwwroot\scripts\ObjectTools.ts" />
-    <None Include="wwwroot\scripts\QueryStringTools.ts" />
-    <None Include="wwwroot\scripts\StringTools.ts" />
-    <None Include="wwwroot\scripts\UiTools.ts" />
+    <None Include="..\..\..\source\silverscript.js" Link="wwwroot\scripts\silverscript.js" />
   </ItemGroup>
 
 </Project>

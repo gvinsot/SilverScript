@@ -5,12 +5,12 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",
-    "outFile": "../silverscript.js"   
+    "outFile": "silverscript.js"   
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "**/*"
+    "ts/**/*"
   ]
 }

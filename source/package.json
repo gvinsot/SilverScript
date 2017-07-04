@@ -1,17 +1,31 @@
 {
-  "name": "trade",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "name": "silverscript.io",
+  "version": "1.0.1",
+  "description": "Simple Binding Framework",
+  "main": "silverscript.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Gildas Vinsot",
   "license": "ISC",
   "dependencies": {
     "promise-any": "^0.2.0",
     "request": "^2.81.0",
     "request-promise-any": "^1.0.4",
-	"jquery":"^2.0.0"
-  }
+    "jquery": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gvinsot/silversript"
+  },
+  "keywords": [
+    "binding"
+  ],
+  "bugs": {
+    "url": "https://github.com/gvinsot/silversript/issues"
+  },
+  "homepage": "https://github.com/gvinsot/silversript",
+  "_id": "silverscript.io@1.0.0",
+  "_shasum": "9c44da9206ab22c709891a11c0867bad78981134",
+  "_from": "silverscript.io@*"
 }
