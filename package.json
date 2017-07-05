@@ -27,5 +27,9 @@
   "homepage": "https://github.com/gvinsot/SilverScript",
   "_id": "silverscript.io@1.0.0",
   "_shasum": "9c44da9206ab22c709891a11c0867bad78981134",
-  "_from": "silverscript.io@*"
+  "_from": "silverscript.io@*",
+  "devDependencies": {
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.1"
+  }
 }
