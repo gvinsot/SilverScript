@@ -197,6 +197,9 @@ var SS;
                     console.log("SS Exception on load " + path + "   MESSAGE : " + msg.statusText);
                     callback(callbackctxt, null);
                 }
+                //complete:function(data,xhr)
+                //{
+                //}
             });
         };
         FileTools.PostJsonFile = function (path, postdata, callbackctxt, callback, errorCallback) {
@@ -649,6 +652,7 @@ var SS;
                     }
                 };
                 BindingTools.EvaluateExpression(dataSourceAttribute.value, dataContextObject, node, false, callback);
+                //}
             }
             else {
                 htmlnode.innerHTML = templateString;
@@ -1021,6 +1025,7 @@ var SS;
                 if (node.parentNode) {
                     node.parentNode.removeChild(node); //remove the node from the DOM tree
                 }
+                //delete node; //clean up just to be sure
             }
         };
         ObjectTools.DeleteChildren = function (node) {
@@ -1031,6 +1036,7 @@ var SS;
                         ObjectTools.DeleteChildren(childNode);
                     }
                     node.removeChild(childNode); //remove the child from the DOM tree
+                    // delete childNode; //clean up just to be sure
                 }
             }
         };

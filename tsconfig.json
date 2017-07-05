@@ -4,13 +4,14 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
+    "declaration": true,
     "target": "es5",
-    "outFile": "silverscript.js"   
+    "outFile": "dist/silverscript.js"   
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "ts/**/*"
+    "src/**/*"
   ]
 }
