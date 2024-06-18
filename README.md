@@ -3,7 +3,6 @@ SilverScript
 SilverScript is a javascript framework dedicated to bring XAML binding syntax to javascript.
 Coupled to TypeScript it provides the perfect environment for XAML developper.
 
-```markdown
 # Get Started.
 
 ![Logo](images/logo.png)
@@ -100,4 +99,4 @@ MyMethod will be called with parameters: MyMethod(valueToConvert,'myparameter')
 
 You can create a json object and add it a PropertyChanged property of type EventHandler.
 You can call yourobject.PropertyChanged.FireEvent("myPropertyName") to raise the PropertyChanged event and update all bindings referencing this property.
-```
+
