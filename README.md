@@ -5,8 +5,6 @@ Coupled to TypeScript it provides the perfect environment for XAML developper.
 
 # Get Started.
 
-![Logo](images/logo.png)
-
 Add the references or download the sample project for TypeScript definitions (Silverscript needs jQuery 2+)
 
 [https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js](https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js)
